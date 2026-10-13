@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Painel pessoal de gerenciamento de tarefas, acompanhamento de progresso e produtividade.">
+    <meta name="author" content="Anthony">
+    <title>Tarefas | Meu Painel</title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- =========================================================
+         CABECALHO PRINCIPAL
+    ========================================================== -->
+    <header class="site-header">
+        <div class="header-content">
+
+            <div class="brand">
+                <a href="perfil.html" class="brand-link" aria-label="Página inicial do painel">
+                    <span class="brand-icon" aria-hidden="true">✓</span>
+                    <span class="brand-name">Meu Painel</span>
+                </a>
+            </div>
+
+    </header>
+
+    <!-- =========================================================
+         NAVEGAÇÃO PRINCIPAL
+    ========================================================== -->
+    <nav class="main-navigation" aria-label="Navegação principal">
+        <div class="navigation-content">
+            <a href="INDEX.html" class="nav-link nav-link-active" aria-current="page">Tarefas</a>
+            <a href="estudos.html" class="nav-link">Estudos</a>
+            <a href="habitos.html" class="nav-link">Hábitos</a>
+            <a href="metas.html" class="nav-link">Metas</a>
+            <a href="planejamento.html" class="nav-link">Planejamento</a>
+            <a href="calendario.html" class="nav-link">Calendário</a>
+        </div>
+    </nav>
+
+    <!-- =========================================================
+         CONTEUDO PRINCIPAL
+    ========================================================== -->
+    <main class="main-content" id="main-content">
+
+        <!-- CABEÇALHO DA PÁGINA -->
+        <section class="page-header" aria-labelledby="page-title">
+            <div class="page-heading">
+                <span class="page-eyebrow">ORGANIZAÇÃO PESSOAL</span>
+                <h1 id="page-title">Minhas Tarefas</h1>
+                <p class="page-description">
+                    Organize suas responsabilidades, acompanhe prazos e mantenha o foco nas suas prioridades diárias.
+                </p>
+            </div>
+
+            <div class="page-header-actions">
+                <button type="button" class="button button-secondary" id="filter-tasks-button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    Filtrar
+                </button>
+
+                <button type="button" class="button button-primary" id="new-task-button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Nova Tarefa
+                </button>
+            </div>
+        </section>
+
+        <!-- RESUMO DAS TAREFAS / OVERVIEW -->
+        <section class="task-overview" aria-labelledby="overview-title">
+            <div class="section-heading">
+                <span class="section-eyebrow">VISÃO GERAL</span>
+                <h2 id="overview-title">Resumo das tarefas</h2>
+            </div>
+
+            <div class="overview-grid">
+                <article class="overview-card overview-card-total">
+                    <div class="overview-card-header">
+                        <span class="overview-card-label">Total</span>
+                    </div>
+                    <div class="overview-card-value">
+                        <strong>0</strong>
+                    </div>
+                    <p class="overview-card-description">tarefas cadastradas</p>
+                </article>
+
+                <article class="overview-card overview-card-pending">
+                    <div class="overview-card-header">
+                        <span class="overview-card-label">Pendentes</span>
+                    </div>
+                    <div class="overview-card-value">
+                        <strong>0</strong>
+                    </div>
+                    <p class="overview-card-description">aguardando conclusão</p>
+                </article>
+
+                <article class="overview-card overview-card-today">
+                    <div class="overview-card-header">
+                        <span class="overview-card-label">Para Hoje</span>
+                    </div>
+                    <div class="overview-card-value">
+                        <strong>0</strong>
+                    </div>
+                    <p class="overview-card-description">tarefas com prazo hoje</p>
+                </article>
+
+                <article class="overview-card overview-card-overdue">
+                    <div class="overview-card-header">
+                        <span class="overview-card-label">Atrasadas</span>
+                    </div>
+                    <div class="overview-card-value">
+                        <strong>0</strong>
+                    </div>
+                    <p class="overview-card-description">precisam de atenção</p>
+                </article>
+
+                <article class="overview-card overview-card-completed">
+                    <div class="overview-card-header">
+                        <span class="overview-card-label">Concluídas</span>
+                    </div>
+                    <div class="overview-card-value">
+                        <strong>0</strong>
+                    </div>
+                    <p class="overview-card-description">tarefas finalizadas</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- PROGRESSO GERAL -->
+        <section class="productivity-section" aria-labelledby="productivity-title">
+            <div class="productivity-header">
+                <div>
+                    <span class="section-eyebrow">PROGRESSO</span>
+                    <h2 id="productivity-title">Progresso Geral</h2>
+                </div>
+                <strong class="productivity-percentage">0%</strong>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" role="progressbar" aria-label="Progresso geral das tarefas" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <span class="progress-value" style="width: 0%;"></span>
+                </div>
+            </div>
+
+            <p class="progress-description">0 de 0 tarefas foram concluídas.</p>
+        </section>
+
+        <!-- GERENCIAMENTO E LISTA DE TAREFAS -->
+        <section class="tasks-management" aria-labelledby="tasks-management-title">
+
+            <div class="tasks-toolbar">
+                <div class="tasks-toolbar-heading">
+                    <span class="section-eyebrow">GERENCIAMENTO</span>
+                    <h2 id="tasks-management-title">Todas as Tarefas</h2>
+                </div>
+
+                <!-- Formulário de Pesquisa -->
+                <form class="task-search-form" action="#" method="get" role="search" onSubmit="event.preventDefault();">
+                    <label for="task-search" class="visually-hidden">Pesquisar tarefas</label>
+                    <input type="search" id="task-search" name="search" placeholder="Pesquisar por tarefa..." autocomplete="off">
+                    <button type="submit" class="button button-search" aria-label="Pesquisar">
+                        Pesquisar
+                    </button>
+                </form>
+            </div>
+
+            <!-- Filtros -->
+            <div class="task-filters" aria-label="Filtros de tarefas">
+                <div class="filter-group">
+                    <label for="status-filter">Status</label>
+                    <select id="status-filter" name="status">
+                        <option value="all">Todos</option>
+                        <option value="pending">Pendentes</option>
+                        <option value="in-progress">Em andamento</option>
+                        <option value="completed">Concluídas</option>
+                        <option value="overdue">Atrasadas</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="category-filter">Categoria</label>
+                    <select id="category-filter" name="category">
+                        <option value="all">Todas</option>
+                        <option value="academico">Acadêmico</option>
+                        <option value="pessoal">Pessoal</option>
+                        <option value="projeto">Projeto</option>
+                        <option value="exercicios">Exercícios</option>
+                        <option value="organização">Organização</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="priority-filter">Prioridade</label>
+                    <select id="priority-filter" name="priority">
+                        <option value="all">Todas</option>
+                        <option value="high">Alta</option>
+                        <option value="medium">Média</option>
+                        <option value="low">Baixa</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="period-filter">Período</label>
+                    <select id="period-filter" name="period">
+                        <option value="all">Todos os períodos</option>
+                        <option value="today">Hoje</option>
+                        <option value="tomorrow">Amanhã</option>
+                        <option value="week">Esta semana</option>
+                        <option value="month">Este mês</option>
+                    </select>
+                </div>
+
+                <button type="button" class="button button-clear-filters" id="clear-filters-button">
+                    Limpar filtros
+                </button>
+            </div>
+
+            <!-- LISTA: IMPORTANTES -->
+            <section class="important-tasks" aria-labelledby="important-tasks-title">
+                <div class="subsection-header">
+                    <div>
+                        <span class="section-eyebrow">ATENÇÃO</span>
+                        <h3 id="important-tasks-title">Tarefas Importantes</h3>
+                    </div>
+                    <span class="task-count">0 tarefas</span>
+                </div>
+                <div class="important-task-list task-list" aria-live="polite"></div>
+            </section>
+
+            <!-- LISTA: HOJE -->
+            <section class="today-tasks" aria-labelledby="today-tasks-title">
+                <div class="subsection-header">
+                    <div>
+                        <span class="section-eyebrow">HOJE</span>
+                        <h3 id="today-tasks-title">Tarefas de Hoje</h3>
+                    </div>
+                    <span class="task-count">0 tarefas</span>
+                </div>
+                <div class="task-list" aria-live="polite"></div>
+            </section>
+
+            <!-- LISTA: PRÓXIMAS -->
+            <section class="upcoming-tasks" aria-labelledby="upcoming-tasks-title">
+                <div class="subsection-header">
+                    <div>
+                        <span class="section-eyebrow">PRÓXIMOS DIAS</span>
+                        <h3 id="upcoming-tasks-title">Próximas Tarefas</h3>
+                    </div>
+                </div>
+                <div class="task-list" aria-live="polite"></div>
+            </section>
+
+            <!-- LISTA: CONCLUÍDAS -->
+            <section class="completed-tasks" aria-labelledby="completed-tasks-title">
+                <div class="subsection-header">
+                    <div>
+                        <span class="section-eyebrow">FINALIZADAS</span>
+                        <h3 id="completed-tasks-title">Tarefas Concluídas</h3>
+                    </div>
+                    <span class="task-count">0 concluídas</span>
+                </div>
+                <div class="task-list" aria-live="polite"></div>
+            </section>
+
+        </section>
+
+        <!-- SIDEBAR AUXILIAR -->
+        <aside class="task-sidebar" aria-label="Informações auxiliares">
+
+            <!-- Criação Rápida -->
+            <section class="quick-add-section" aria-labelledby="quick-add-title">
+                <div class="sidebar-heading">
+                    <span class="section-eyebrow">AÇÃO RÁPIDA</span>
+                    <h2 id="quick-add-title">Nova Tarefa Rápida</h2>
+                </div>
+
+                <form class="quick-task-form" action="#" method="post">
+                    <div class="form-field">
+                        <label for="quick-task-title">Título</label>
+                        <input type="text" id="quick-task-title" name="title" placeholder="O que precisa ser feito?" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="quick-task-category">Categoria</label>
+                        <select id="quick-task-category" name="category">
+                            <option value="pessoal">Pessoal</option>
+                            <option value="academico">Acadêmico</option>
+                            <option value="projeto">Projeto</option>
+                            <option value="exercicios">Exercícios</option>
+                            <option value="organição">Organização</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="quick-task-priority">Prioridade</label>
+                        <select id="quick-task-priority" name="priority">
+                            <option value="medium">Média</option>
+                            <option value="high">Alta</option>
+                            <option value="low">Baixa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="quick-task-date">Data</label>
+                        <input type="date" id="quick-task-date" name="date">
+                    </div>
+
+                    <div class="form-field">
+                        <label for="quick-task-time">Horário</label>
+                        <input type="time" id="quick-task-time" name="time">
+                    </div>
+
+                    <button type="submit" class="button button-primary button-full">
+                        Adicionar Tarefa
+                    </button>
+                </form>
+            </section>
+
+            <!-- Categorias -->
+            <section class="categories-section" aria-labelledby="categories-title">
+                <div class="sidebar-heading">
+                    <span class="section-eyebrow">ORGANIZAÇÃO</span>
+                    <h2 id="categories-title">Categorias</h2>
+                </div>
+
+                <ul class="category-list">
+                    <li class="category-item">
+                        <button type="button" class="category-button" data-category="academic">
+                            <span class="category-name">Acadêmico</span>
+                            <span class="category-count">0</span>
+                        </button>
+                    </li>
+                    <li class="category-item">
+                        <button type="button" class="category-button" data-category="pessoal">
+                            <span class="category-name">Pessoal</span>
+                            <span class="category-count">0</span>
+                        </button>
+                    </li>
+                    <li class="category-item">
+                        <button type="button" class="category-button" data-category="projeto">
+                            <span class="category-name">Projetos</span>
+                            <span class="category-count">0</span>
+                        </button>
+                    </li>
+                    <li class="category-item">
+                        <button type="button" class="category-button" data-category="exercicios">
+                            <span class="category-name">Exercícios</span>
+                            <span class="category-count">0</span>
+                        </button>
+                    </li>
+                    <li class="category-item">
+                        <button type="button" class="category-button" data-category="Organização">
+                            <span class="category-name">Organização</span>
+                            <span class="category-count">0</span>
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Distribuição -->
+            <section class="task-distribution" aria-labelledby="distribution-title">
+                <div class="sidebar-heading">
+                    <span class="section-eyebrow">DISTRIBUIÇÃO</span>
+                    <h2 id="distribution-title">Tarefas por Categoria</h2>
+                </div>
+
+                <dl class="distribution-list">
+                    <div class="distribution-item">
+                        <dt>Acadêmico</dt>
+                        <dd>0%</dd>
+                    </div>
+                    <div class="distribution-item">
+                        <dt>Pessoal</dt>
+                        <dd>0%</dd>
+                    </div>
+                    <div class="distribution-item">
+                        <dt>Projetos</dt>
+                        <dd>0%</dd>
+                    </div>
+                    <div class="distribution-item">
+                        <dt>Exercícios</dt>
+                        <dd>0%</dd>
+                    </div>
+                    <div class="distribution-item">
+                        <dt>Organização</dt>
+                        <dd>0%</dd>
+                    </div>
+                </dl>
+            </section>
+
+        </aside>
+
+<!-- BOTÃO QUE ABRE O FORMULÁRIO -->
+<div class="form-trigger-container">
+    <button type="button" class="button button-primary" id="open-task-modal-btn">
+        + Adicionar / Editar tarefa
+    </button>
+</div>
+
+<!-- MODAL COM O FORMULÁRIO COMPLETO (ESCONDIDO POR PADRÃO) -->
+<div class="modal" id="task-modal" hidden>
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    
+    <section class="modal-dialog modal-large" role="dialog" aria-modal="true" aria-labelledby="new-task-title">
+        <header class="modal-header">
+            <div>
+                <span class="section-eyebrow">CRIAR / EDITAR</span>
+                <h2 id="new-task-title">Adicionar nova tarefa</h2>
+            </div>
+            <button class="icon-button" type="button" id="close-task-modal-btn" aria-label="Fechar modal">×</button>
+        </header>
+
+        <form class="new-task-form" action="#" method="post">
+            <fieldset>
+                <legend>Informações básicas</legend>
+
+                <div class="form-row">
+                    <div class="form-field form-field-large">
+                        <label for="task-title">Título da tarefa *</label>
+                        <input type="text" id="task-title" name="task_title" placeholder="Digite o título da tarefa" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="task-category">Categoria *</label>
+                        <select id="task-category" name="task_category" required>
+                            <option value="">Selecionar</option>
+                            <option value="academico">Acadêmico</option>
+                            <option value="pessoal">Pessoal</option>
+                            <option value="projeto">Projeto</option>
+                            <option value="exercicios">Exercícios</option>
+                            <option value="organização">Organização</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="task-description">Descrição</label>
+                    <textarea id="task-description" name="task_description" rows="4" placeholder="Descreva o que precisa ser feito..."></textarea>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Planejamento</legend>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="task-priority">Prioridade *</label>
+                        <select id="task-priority" name="task_priority" required>
+                            <option value="">Selecionar</option>
+                            <option value="high">Alta</option>
+                            <option value="medium">Média</option>
+                            <option value="low">Baixa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="task-status">Status</label>
+                        <select id="task-status" name="task_status">
+                            <option value="pending">Pendente</option>
+                            <option value="in-progress">Em andamento</option>
+                            <option value="completed">Concluída</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="task-due-date">Data de vencimento *</label>
+                        <input type="date" id="task-due-date" name="task_due_date" required>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="task-due-time">Horário limite</label>
+                        <input type="time" id="task-due-time" name="task_due_time">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Organização adicional</legend>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="task-type">Tipo de tarefa</label>
+                        <select id="task-type" name="task_type">
+                            <option value="single">Tarefa única</option>
+                            <option value="recurring">Tarefa recorrente</option>
+                        </select>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="task-estimated-time">Tempo estimado</label>
+                        <input type="text" id="task-estimated-time" name="task_estimated_time" placeholder="Ex.: 1h 30min">
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="task-notes">Observações</label>
+                    <textarea id="task-notes" name="task_notes" rows="3" placeholder="Adicione observações ou informações importantes..."></textarea>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="button" class="button button-secondary" id="cancel-task-modal-btn">Cancelar</button>
+                <button type="submit" class="button button-primary">Criar tarefa</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+    <!-- RODAPÉ -->
+
+
+    <!-- SCRIPT DA PÁGINA DE TAREFAS -->
+    <script src="js/tarefa.js" defer></script>
+</body>
+</html>

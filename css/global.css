@@ -1,0 +1,403 @@
+/* =========================================================
+   GLOBAL CSS — ESTILOS GLOBAIS E NAVEGAÇÃO
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   01. VARIÁVEIS GLOBAIS & TEMA
+   --------------------------------------------------------- */
+:root {
+    /* Cores Principais */
+    --color-background: #0b0f0d;
+    --color-surface: #101512;
+    --color-surface-hover: #151b17;
+    --color-border: #202622;
+
+    /* Cores de Destaque */
+    --color-primary: #27de80;
+    --color-primary-hover: #35e58a;
+    --color-primary-soft: rgba(39, 222, 128, 0.12);
+
+    /* Cores de Texto */
+    --color-text: #f1f3f2;
+    --color-text-secondary: #8b938f;
+
+    /* Espaçamentos Padronizados */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+
+    /* Tipografia */
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+
+    /* Layout */
+    --header-height: 4.25rem;
+    --navigation-height: 3.5rem;
+    --content-width: 1440px;
+}
+
+
+/* ---------------------------------------------------------
+   02. RESET & BASE
+   --------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+a {
+    font: inherit;
+}
+
+button {
+    border: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* ---------------------------------------------------------
+   03. HEADER
+   --------------------------------------------------------- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    height: var(--header-height);
+
+    background: rgba(11, 15, 13, 0.96);
+    border-bottom: 1px solid var(--color-border);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.header-content {
+    width: 100%;
+    max-width: var(--content-width);
+    height: 100%;
+
+    margin: 0 auto;
+    padding: 0 1.5rem;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/* ---------------------------------------------------------
+   04. MARCA
+   --------------------------------------------------------- */
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    color: var(--color-text);
+}
+
+.brand-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(39, 222, 128, 0.35);
+    border-radius: 5px;
+
+    background: rgba(39, 222, 128, 0.06);
+
+    color: var(--color-primary);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.brand-name {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+
+/* ---------------------------------------------------------
+   05. DATA & AÇÕES DO HEADER
+   --------------------------------------------------------- */
+.header-date {
+    margin-left: auto;
+    margin-right: 2rem;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+}
+
+.header-action {
+    padding: 0;
+
+    background: transparent;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.85rem;
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.header-action:hover {
+    color: var(--color-text);
+}
+
+.header-action:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+
+/* ---------------------------------------------------------
+   06. NAVEGAÇÃO & LINKS
+   --------------------------------------------------------- */
+.main-navigation {
+    height: var(--navigation-height);
+
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.navigation-content {
+    width: 100%;
+    max-width: var(--content-width);
+    height: 100%;
+
+    margin: 0 auto;
+    padding: 0 1.5rem;
+
+    display: flex;
+    align-items: stretch;
+    gap: 0.25rem;
+
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.navigation-content::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-link {
+    position: relative;
+
+    min-width: max-content;
+
+    height: 100%;
+    padding: 0 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.nav-link-active {
+    color: var(--color-primary);
+}
+
+.nav-link-active::after {
+    content: "";
+
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: -1px;
+
+    height: 2px;
+
+    background: var(--color-primary);
+}
+
+
+/* ---------------------------------------------------------
+   07. CABEÇALHOS DE SEÇÃO PADRONIZADOS
+   --------------------------------------------------------- */
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+}
+
+.section-heading h2,
+.subsection-header h3,
+.sidebar-heading h2 {
+    margin-bottom: 0;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+}
+
+.section-heading h2 {
+    font-size: var(--font-size-xl);
+}
+
+.subsection-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.subsection-header h3 {
+    font-size: var(--font-size-lg);
+}
+
+.sidebar-heading {
+    margin-bottom: var(--space-5);
+}
+
+.sidebar-heading h2 {
+    font-size: var(--font-size-lg);
+}
+
+
+/* ---------------------------------------------------------
+   08. RESPONSIVIDADE
+   --------------------------------------------------------- */
+@media (max-width: 768px) {
+    .header-content {
+        padding: 0 1rem;
+    }
+
+    .header-date {
+        display: none;
+    }
+
+    .header-actions {
+        margin-left: auto;
+        gap: 1.25rem;
+    }
+
+    .navigation-content {
+        padding: 0 1rem;
+    }
+
+    .nav-link {
+        padding: 0 0.85rem;
+    }
+
+    .nav-link-active::after {
+        left: 0.85rem;
+        right: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --header-height: 3.75rem;
+        --navigation-height: 3.25rem;
+    }
+
+    .brand-link {
+        gap: 0.6rem;
+    }
+
+    .brand-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .brand-name {
+        font-size: 0.95rem;
+    }
+
+    .header-action {
+        font-size: 0.78rem;
+    }
+
+    .header-actions {
+        gap: 1rem;
+    }
+
+    .nav-link {
+        padding: 0 0.75rem;
+        font-size: 0.78rem;
+    }
+
+    .nav-link-active::after {
+        left: 0.75rem;
+        right: 0.75rem;
+    }
+}
+
+
+/* ---------------------------------------------------------
+   09. ACESSIBILIDADE
+   --------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+    }
+}

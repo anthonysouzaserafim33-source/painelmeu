@@ -1,0 +1,806 @@
+/* =========================================================
+   ESTILOS ESPECÍFICOS — PÁGINA DE TAREFAS
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   01. ESTRUTURA PRINCIPAL
+   --------------------------------------------------------- */
+.main-content {
+    width: min(100% - 2.5rem, var(--content-width));
+    margin: 0 auto;
+    padding: var(--space-6) 0 var(--space-7);
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--space-6);
+    align-items: start;
+}
+
+.page-header,
+.task-overview,
+.productivity-section,
+.new-task-section {
+    grid-column: 1 / -1;
+}
+
+/* ---------------------------------------------------------
+   02. CABEÇALHO DA PÁGINA
+   --------------------------------------------------------- */
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.page-heading {
+    max-width: 760px;
+}
+
+.page-eyebrow,
+.section-eyebrow {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent, #27DE80);
+    margin-bottom: 0.25rem;
+}
+
+.page-header h1 {
+    margin-bottom: var(--space-2);
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+}
+
+.page-description {
+    margin-bottom: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+}
+
+.page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------
+   03. BOTÕES
+   --------------------------------------------------------- */
+.button {
+    min-height: 42px;
+    padding: 0.6rem 1.15rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.button:active {
+    transform: translateY(1px);
+}
+
+.button-primary {
+    background-color: var(--color-primary);
+    color: #04140b;
+    box-shadow: 0 2px 10px rgba(39, 222, 128, 0.2);
+}
+
+.button-primary:hover {
+    background-color: var(--color-primary-hover);
+    box-shadow: 0 4px 15px rgba(39, 222, 128, 0.3);
+}
+
+.button-secondary {
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.button-secondary:hover {
+    background-color: var(--color-surface-hover);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: var(--color-text);
+}
+
+.button-search {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
+}
+
+.button-search:hover {
+    border-color: rgba(39, 222, 128, 0.3);
+    color: var(--color-text);
+}
+
+.button-clear-filters {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+}
+
+.button-clear-filters:hover {
+    color: var(--color-primary);
+}
+
+.button-full {
+    width: 100%;
+}
+
+.text-button {
+    background-color: transparent;
+    color: var(--color-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.text-button:hover {
+    text-decoration: underline;
+}
+
+/* ---------------------------------------------------------
+   04. OVERVIEW (RESUMO DE MÉTRICAS)
+   --------------------------------------------------------- */
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-3);
+}
+
+.overview-card {
+    padding: var(--space-4) var(--space-5);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.overview-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(39, 222, 128, 0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.overview-card-label {
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.overview-card-value {
+    margin: var(--space-2) 0 var(--space-1);
+}
+
+.overview-card-value strong {
+    font-size: 1.85rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-text);
+}
+
+.overview-card-description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+}
+
+.overview-card-pending .overview-card-value strong,
+.overview-card-today .overview-card-value strong {
+    color: var(--color-primary);
+}
+
+.overview-card-overdue .overview-card-value strong {
+    color: #ef4444;
+}
+
+/* ---------------------------------------------------------
+   05. PROGRESSO & PRODUTIVIDADE
+   --------------------------------------------------------- */
+.productivity-section {
+    padding: var(--space-5);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+}
+
+.productivity-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+}
+
+.productivity-percentage {
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+}
+
+.progress-value {
+    display: block;
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: inherit;
+    box-shadow: 0 0 10px rgba(39, 222, 128, 0.3);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-description {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+}
+
+/* ---------------------------------------------------------
+   06. FORMULÁRIOS, ENTRADAS E FILTROS
+   --------------------------------------------------------- */
+.tasks-management {
+    grid-column: 1;
+    min-width: 0;
+}
+
+.tasks-toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.task-search-form {
+    width: min(100%, 360px);
+    display: flex;
+    gap: var(--space-2);
+}
+
+.task-filters {
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+}
+
+.filter-group {
+    flex: 1 1 130px;
+    min-width: 120px;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: var(--space-1);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+    width: 100%;
+    height: 42px;
+    padding: 0 0.85rem;
+    background-color: #070a08;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+textarea {
+    height: auto;
+    padding: 0.75rem;
+    resize: vertical;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+/* ---------------------------------------------------------
+   07. CARDS DE TAREFA
+   --------------------------------------------------------- */
+.important-tasks,
+.today-tasks,
+.upcoming-tasks,
+.completed-tasks {
+    margin-bottom: var(--space-6);
+}
+
+.task-count {
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.task-card {
+    padding: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.task-card:hover {
+    background-color: var(--color-surface-hover);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.task-card-important {
+    border-left: 3px solid var(--color-primary);
+}
+
+.task-card-overdue {
+    border-left: 3px solid #ef4444;
+}
+
+.task-card-main {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.task-checkbox {
+    padding-top: 2px;
+}
+
+.task-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+}
+
+.task-title {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.task-description {
+    margin: 0 0 var(--space-2);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+}
+
+.task-metadata {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+}
+
+.task-priority {
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.priority-high {
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    border: 1px solid rgba(39, 222, 128, 0.25);
+}
+
+.priority-medium {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+}
+
+.priority-low {
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+}
+
+.task-card-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+}
+
+.task-action {
+    padding: 0.4rem 0.65rem;
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.task-action:hover {
+    color: var(--color-text);
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.task-card-completed {
+    opacity: 0.55;
+}
+
+.task-card-completed .task-title {
+    text-decoration: line-through;
+}
+
+.task-empty-state {
+    padding: var(--space-4);
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* ---------------------------------------------------------
+   08. SIDEBAR AUXILIAR
+   --------------------------------------------------------- */
+.task-sidebar {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.quick-add-section,
+.categories-section,
+.task-distribution {
+    padding: var(--space-5);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+}
+
+.quick-task-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: var(--space-1);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+}
+
+.category-list {
+    margin-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.category-button {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.category-button:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: var(--color-text);
+}
+
+.distribution-list {
+    margin-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.distribution-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+.distribution-item dd {
+    margin: 0;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* ---------------------------------------------------------
+   09. FORMULÁRIO COMPLETO
+   --------------------------------------------------------- */
+.new-task-form {
+    padding: var(--space-6);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+}
+
+.new-task-form fieldset {
+    margin: 0 0 var(--space-6);
+    padding: 0 0 var(--space-5);
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.new-task-form fieldset:last-of-type {
+    border-bottom: 0;
+    margin-bottom: var(--space-4);
+}
+
+.new-task-form legend {
+    margin-bottom: var(--space-4);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-3);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+}
+
+/* ---------------------------------------------------------
+   10. RODAPÉ
+   --------------------------------------------------------- */
+.site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-5) 0;
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 0.8rem;
+}
+
+.footer-content {
+    width: min(100% - 3rem, var(--content-width));
+    margin: 0 auto;
+}
+
+/* ---------------------------------------------------------
+   11. ADAPTAÇÕES MOBILE (INCLUINDO SAMSUNG A15)
+   --------------------------------------------------------- */
+@media (max-width: 900px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+
+    .tasks-management,
+    .task-sidebar {
+        grid-column: 1;
+    }
+
+    .task-sidebar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+
+    .quick-add-section {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 680px) {
+    .main-content {
+        width: min(100% - 2rem, var(--content-width));
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .page-header-actions {
+        width: 100%;
+    }
+
+    .page-header-actions .button {
+        flex: 1;
+    }
+
+    .tasks-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .task-search-form {
+        width: 100%;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .task-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .task-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .task-card-actions {
+        justify-content: flex-end;
+        border-top: 1px solid var(--color-border);
+        padding-top: var(--space-2);
+    }
+}
+
+@media (max-width: 412px) {
+    .main-content {
+        width: min(100% - 1.5rem, var(--content-width));
+        padding-top: var(--space-4);
+    }
+
+    .overview-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .button {
+        min-height: 44px;
+    }
+
+    input[type="text"],
+    input[type="search"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+        font-size: 16px;
+        min-height: 44px;
+    }
+}
+
+/* Container de acionamento */
+.form-trigger-container {
+    margin-top: var(--space-6);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Modal Estrutura */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal[hidden] {
+    display: none !important;
+}
+
+
+.modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+.modal-dialog {
+    position: relative;
+    background: var(--color-surface, #101512);
+    border: 1px solid var(--color-border, #202622);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 95vw;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1001;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.icon-button {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary, #8b938f);
+    font-size: 1.75rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.15s ease;
+}
+
+.icon-button:hover {
+    color: var(--color-text, #f1f3f2);
+}
+
+/* Ajuste nos campos dentro do modal */
+.modal .new-task-form {
+    padding: 0;
+    background: transparent;
+    border: none;
+}

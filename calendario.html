@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calendário unificado de eventos, tarefas, estudos e metas do Meu Painel.">
+    <meta name="author" content="Anthony">
+    <meta name="theme-color" content="#0b0f0d">
+
+    <title>Calendário | Meu Painel</title>
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/calendario.css">
+
+    <script src="js/calendario.js" defer></script>
+</head>
+
+<body>
+    <!-- CABEÇALHO -->
+    <header class="site-header">
+        <div class="header-content">
+
+            <div class="brand">
+                <a href="perfil.html" class="brand-link" aria-label="Ir para a página inicial">
+                    <span class="brand-icon" aria-hidden="true">✓</span>
+                    <span class="brand-name">Meu Painel</span>
+                </a>
+            </div>
+
+
+
+        </div>
+    </header>
+
+    <!-- NAVEGAÇÃO -->
+    <nav class="main-navigation" aria-label="Navegação principal">
+        <div class="navigation-content">
+            <a href="index.html" class="nav-link">Tarefas</a>
+            <a href="estudos.html" class="nav-link">Estudos</a>
+            <a href="habitos.html" class="nav-link">Hábitos</a>
+            <a href="metas.html" class="nav-link">Metas</a>
+            <a href="planejamento.html" class="nav-link">Planejamento</a>
+            <a
+                href="calendario.html"
+                class="nav-link nav-link-active"
+                aria-current="page"
+            >
+                Calendário
+            </a>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="calendar-page" id="calendar-main">
+
+        <!-- CABEÇALHO DA PÁGINA -->
+        <section class="calendar-hero">
+            <div class="hero-titles">
+                <span class="page-eyebrow">ORGANIZAÇÃO DA ROTINA</span>
+                <h1>Calendário</h1>
+                <p class="page-description">
+                    Visualize seus compromissos, tarefas, estudos e metas
+                    em um único calendário.
+                </p>
+            </div>
+
+            <div class="hero-actions">
+                <button
+                    type="button"
+                    class="button button-secondary"
+                    id="today-jump-btn"
+                >
+                    Hoje
+                </button>
+
+                <button
+                    type="button"
+                    class="button button-primary"
+                    id="new-event-button"
+                    aria-haspopup="dialog"
+                    aria-controls="event-modal"
+                >
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        aria-hidden="true"
+                    >
+                        <path d="M12 5v14"></path>
+                        <path d="M5 12h14"></path>
+                    </svg>
+                    Novo evento
+                </button>
+            </div>
+        </section>
+
+        <!-- NAVEGAÇÃO TEMPORAL E MODOS DE VISUALIZAÇÃO -->
+        <section
+            class="calendar-toolbar"
+            aria-label="Controles do calendário"
+        >
+            <div class="temporal-nav-controls">
+                <button
+                    type="button"
+                    class="button button-secondary button-small"
+                    id="prev-period-btn"
+                    aria-label="Ir para o período anterior"
+                >
+                    <span aria-hidden="true">←</span>
+                    Anterior
+                </button>
+
+                <h2
+                    id="current-period-label"
+                    class="period-display-title"
+                    aria-live="polite"
+                >
+                    Carregando...
+                </h2>
+
+                <button
+                    type="button"
+                    class="button button-secondary button-small"
+                    id="next-period-btn"
+                    aria-label="Ir para o próximo período"
+                >
+                    Próximo
+                    <span aria-hidden="true">→</span>
+                </button>
+            </div>
+
+            <div
+                class="view-mode-tabs"
+                role="tablist"
+                aria-label="Visualização do calendário"
+            >
+                <button
+                    type="button"
+                    class="view-tab active"
+                    id="month-tab"
+                    data-view="month"
+                    role="tab"
+                    aria-selected="true"
+                    aria-controls="view-month"
+                >
+                    Mês
+                </button>
+
+                <button
+                    type="button"
+                    class="view-tab"
+                    id="week-tab"
+                    data-view="week"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="view-week"
+                    tabindex="-1"
+                >
+                    Semana
+                </button>
+
+                <button
+                    type="button"
+                    class="view-tab"
+                    id="day-tab"
+                    data-view="day"
+                    role="tab"
+                    aria-selected="false"
+                    aria-controls="view-day"
+                    tabindex="-1"
+                >
+                    Dia
+                </button>
+            </div>
+        </section>
+
+        <!-- FILTROS -->
+        <section
+            class="calendar-filter-bar"
+            aria-label="Pesquisa e filtros"
+        >
+            <label class="search-field" for="calendar-search">
+                <span>Pesquisar</span>
+                <input
+                    type="search"
+                    id="calendar-search"
+                    placeholder="Buscar eventos, tarefas ou estudos..."
+                    autocomplete="off"
+                >
+            </label>
+
+            <label for="calendar-origin-filter">
+                <span>Origem</span>
+                <select id="calendar-origin-filter">
+                    <option value="todas">Todas as origens</option>
+                    <option value="evento">Eventos</option>
+                    <option value="palanejamento">Planejamento</option>
+                    <option value="tarefa">Tarefas</option>
+                    <option value="estudo">Estudos</option>
+                    <option value="metas">Metas</option>
+                </select>
+            </label>
+
+            <label for="calendar-category-filter">
+                <span>Categoria</span>
+                <select id="calendar-category-filter">
+                    <option value="all">Todas as categorias</option>
+                    <option value="Pessoal">Pessoal</option>
+                    <option value="Escola">Escola</option>
+                    <option value="Estudos">Estudos</option>
+                    <option value="Compromissos">Compromissos</option>
+                    <option value="Saúde e rotina">Saúde e rotina</option>
+                    <option value="Outros">Outros</option>
+                </select>
+            </label>
+
+            <button
+                type="button"
+                class="text-button"
+                id="clear-calendar-filters"
+            >
+                Limpar filtros
+            </button>
+        </section>
+
+        <!-- INDICADORES DO PERÍODO -->
+        <section
+            class="calendar-metrics-grid"
+            aria-labelledby="metrics-section-title"
+        >
+            <h2 id="metrics-section-title" class="sr-only">
+                Resumo do período
+            </h2>
+
+            <article class="metric-card">
+                <span class="metric-label">Eventos no período</span>
+                <strong
+                    class="metric-value text-primary"
+                    id="stat-total-events"
+                    aria-live="polite"
+                >
+                    0
+                </strong>
+                <p class="metric-desc">Itens programados</p>
+            </article>
+
+            <article class="metric-card">
+                <span class="metric-label">Tarefas pendentes</span>
+                <strong
+                    class="metric-value"
+                    id="stat-pending-tasks"
+                    aria-live="polite"
+                >
+                    0
+                </strong>
+                <p class="metric-desc">Tarefas não concluídas</p>
+            </article>
+
+            <article class="metric-card">
+                <span class="metric-label">Estudos e metas</span>
+                <strong
+                    class="metric-value text-success"
+                    id="stat-study-goals"
+                    aria-live="polite"
+                >
+                    0
+                </strong>
+                <p class="metric-desc">Itens associados ao período</p>
+            </article>
+        </section>
+
+        <!-- CALENDÁRIO -->
+        <section
+            class="calendar-main-container"
+            aria-label="Calendário de compromissos"
+        >
+
+            <!-- VISUALIZAÇÃO MENSAL -->
+            <section
+                id="view-month"
+                class="calendar-view-panel active"
+                role="tabpanel"
+                aria-labelledby="month-tab"
+            >
+                <div
+                    class="calendar-weekdays-header"
+                    aria-hidden="true"
+                >
+                    <span>Dom</span>
+                    <span>Seg</span>
+                    <span>Ter</span>
+                    <span>Qua</span>
+                    <span>Qui</span>
+                    <span>Sex</span>
+                    <span>Sáb</span>
+                </div>
+
+                <div
+                    id="month-grid-container"
+                    class="month-grid"
+                    aria-label="Dias do mês"
+                >
+                    <!-- Conteúdo gerado pelo JavaScript -->
+                </div>
+            </section>
+
+            <!-- VISUALIZAÇÃO SEMANAL -->
+            <section
+                id="view-week"
+                class="calendar-view-panel"
+                role="tabpanel"
+                aria-labelledby="week-tab"
+                hidden
+            >
+                <div
+                    id="week-grid-container"
+                    class="week-grid-container"
+                    aria-label="Dias da semana"
+                >
+                    <!-- Conteúdo gerado pelo JavaScript -->
+                </div>
+            </section>
+
+            <!-- VISUALIZAÇÃO DIÁRIA -->
+            <section
+                id="view-day"
+                class="calendar-view-panel"
+                role="tabpanel"
+                aria-labelledby="day-tab"
+                hidden
+            >
+                <div
+                    id="day-grid-container"
+                    class="day-grid-container"
+                    aria-label="Agenda do dia"
+                >
+                    <!-- Conteúdo gerado pelo JavaScript -->
+                </div>
+            </section>
+
+        </section>
+    </main>
+
+    <!-- =====================================================
+         MODAL DE CRIAÇÃO E EDIÇÃO DE EVENTOS
+    ====================================================== -->
+    <div
+        class="modal"
+        id="event-modal"
+        hidden
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="event-modal-title"
+    >
+        <div
+            class="modal-backdrop"
+            data-close-modal="event-modal"
+            aria-hidden="true"
+        ></div>
+
+        <section class="modal-dialog">
+            <header class="modal-header">
+                <div>
+                    <span class="page-eyebrow">CALENDÁRIO</span>
+                    <h2 id="event-modal-title">Novo evento</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="icon-button"
+                    data-close-modal="event-modal"
+                    aria-label="Fechar janela"
+                >
+                    ×
+                </button>
+            </header>
+
+            <form id="event-form" class="form-grid" novalidate>
+                <input type="hidden" id="event-id" name="id">
+
+                <div class="field-full">
+                    <label for="event-title">Título *</label>
+                    <input
+                        type="text"
+                        id="event-title"
+                        name="title"
+                        maxlength="120"
+                        placeholder="Nome do compromisso"
+                        required
+                    >
+                </div>
+
+                <div class="field-full">
+                    <label for="event-description">Descrição</label>
+                    <textarea
+                        id="event-description"
+                        name="description"
+                        rows="3"
+                        maxlength="1000"
+                        placeholder="Informações adicionais sobre o evento"
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label for="event-category">Categoria *</label>
+                    <select id="event-category" name="category" required>
+                        <option value="Pessoal">Pessoal</option>
+                        <option value="Escola">Escola</option>
+                        <option value="Estudos">Estudos</option>
+                        <option value="Compromissos">Compromissos</option>
+                        <option value="Saúde e rotina">Saúde e rotina</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="event-color">Cor identificadora</label>
+                    <input
+                        type="color"
+                        id="event-color"
+                        name="color"
+                        value="#27DE80"
+                    >
+                </div>
+
+                <div>
+                    <label for="event-date">Data *</label>
+                    <input
+                        type="date"
+                        id="event-date"
+                        name="date"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="event-location">Local</label>
+                    <input
+                        type="text"
+                        id="event-location"
+                        name="location"
+                        maxlength="200"
+                        placeholder="Local do compromisso"
+                    >
+                </div>
+
+                <div>
+                    <label for="event-start-time">Horário inicial</label>
+                    <input
+                        type="time"
+                        id="event-start-time"
+                        name="startTime"
+                    >
+                </div>
+
+                <div>
+                    <label for="event-end-time">Horário final</label>
+                    <input
+                        type="time"
+                        id="event-end-time"
+                        name="endTime"
+                    >
+                </div>
+
+                <div
+                    id="event-conflict-box"
+                    class="conflict-warning-box"
+                    role="alert"
+                    hidden
+                >
+                    <strong>Atenção:</strong>
+                    existe um possível conflito de horário com outro evento.
+                </div>
+
+                <div class="form-actions field-full">
+                    <button
+                        type="button"
+                        class="button button-secondary"
+                        data-close-modal="event-modal"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="button button-primary"
+                        id="save-event-button"
+                    >
+                        Salvar evento
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- =====================================================
+         MODAL DE DETALHES
+    ====================================================== -->
+    <div
+        class="modal"
+        id="details-modal"
+        hidden
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="details-modal-title"
+    >
+        <div
+            class="modal-backdrop"
+            data-close-modal="details-modal"
+            aria-hidden="true"
+        ></div>
+
+        <section class="modal-dialog">
+            <header class="modal-header">
+                <div>
+                    <span
+                        id="details-origin-badge"
+                        class="activity-category-badge"
+                    >
+                        Evento
+                    </span>
+
+                    <h2 id="details-modal-title">Detalhes do item</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="icon-button"
+                    data-close-modal="details-modal"
+                    aria-label="Fechar detalhes"
+                >
+                    ×
+                </button>
+            </header>
+
+            <div class="modal-body-content">
+                <p id="details-description"></p>
+
+                <dl class="details-list">
+                    <div>
+                        <dt>Data</dt>
+                        <dd id="details-date">—</dd>
+                    </div>
+
+                    <div>
+                        <dt>Horário</dt>
+                        <dd id="details-time">—</dd>
+                    </div>
+
+                    <div>
+                        <dt>Local</dt>
+                        <dd id="details-location">—</dd>
+                    </div>
+
+                    <div>
+                        <dt>Categoria</dt>
+                        <dd id="details-category">—</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <footer class="form-actions field-full" id="details-actions-row">
+                <button
+                    type="button"
+                    class="button button-secondary"
+                    data-close-modal="details-modal"
+                >
+                    Fechar
+                </button>
+            </footer>
+        </section>
+    </div>
+
+    <!-- NOTIFICAÇÕES TEMPORÁRIAS -->
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+    ></div>
+
+</body>
+</html>
+

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#111412">
+
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/estudos.css">
+
+    <!-- Chart.js para renderização dos gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="js/estudos.js" defer></script>
+
+    <title>Estudos | Meu Painel</title>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="header-content">
+
+        <div class="brand">
+            <a href="perfil.html" class="brand-link" aria-label="Página inicial do painel">
+                <span class="brand-icon" aria-hidden="true">✓</span>
+                <span class="brand-name">Meu Painel</span>
+            </a>
+        </div>
+
+
+        </div>
+
+    </div>
+</header>
+
+<nav class="main-navigation" aria-label="Navegação principal">
+    <div class="navigation-content">
+
+        <a href="index.html" class="nav-link">
+            Tarefas
+        </a>
+
+        <a href="estudos.html" class="nav-link nav-link-active" aria-current="page">
+            Estudos
+        </a>
+
+        <a href="habitos.html" class="nav-link">
+            Hábitos
+        </a>
+
+        <a href="metas.html" class="nav-link">
+            Metas
+        </a>
+
+        <a href="planejamento.html" class="nav-link">
+            Planejamento
+        </a>
+
+        <a href="calendario.html" class="nav-link">
+            Calendário
+        </a>
+
+    </div>
+</nav>
+
+<main class="studies-page" id="studies-main">
+
+    <!-- CABEÇALHO -->
+    <header class="studies-hero">
+        <div>
+            <h1>Estudos</h1>
+        </div>
+        <div class="hero-actions">
+            <button type="button" class="button button-secondary" id="study-history-button">Histórico</button>
+            <button type="button" class="button button-primary" id="new-content-button">Novo conteúdo</button>
+        </div>
+    </header>
+
+    <!-- VISÃO GERAL -->
+    <section class="studies-overview" id="overview-section" aria-labelledby="overview-title">
+        <div class="section-header compact">
+            <div>
+                <h2 id="overview-title">Visão geral</h2>
+            </div>
+            <label class="compact-field">
+                <span>Período</span>
+                <select id="overview-period">
+                    <option value="7">7 dias</option>
+                    <option value="30" selected>30 dias</option>
+                    <option value="90">90 dias</option>
+                    <option value="365">1 ano</option>
+                    <option value="all">Todo o período</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="overview-grid">
+            <article class="metric-card">
+                <span>Horas estudadas</span>
+                <strong data-study-stat="hours">0min</strong>
+            </article>
+            <article class="metric-card">
+                <span>Questões</span>
+                <strong data-study-stat="questions">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>Precisão</span>
+                <strong data-study-stat="accuracy">0%</strong>
+            </article>
+            <article class="metric-card">
+                <span>Registros</span>
+                <strong data-study-stat="records">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>Em andamento</span>
+                <strong data-study-stat="activeContents">0</strong>
+            </article>
+            <article class="metric-card">
+                <span>Concluídos</span>
+                <strong data-study-stat="completedContents">0</strong>
+            </article>
+        </div>
+    </section>
+
+    <!-- PRIORIDADES -->
+    <section class="decision-section" aria-labelledby="decision-title">
+        <div class="section-header compact">
+            <div>
+                <h2 id="decision-title">Agora</h2>
+            </div>
+        </div>
+
+        <div class="decision-grid">
+            <article class="decision-panel">
+                <div class="panel-heading">
+                    <h3>Continue estudando</h3>
+                    <span id="continue-count">0</span>
+                </div>
+                <div id="continue-list" class="decision-list"></div>
+            </article>
+
+            <article class="decision-panel">
+                <div class="panel-heading">
+                    <h3>Precisa de atenção</h3>
+                    <span id="attention-count">0</span>
+                </div>
+                <div id="attention-list" class="decision-list"></div>
+            </article>
+        </div>
+    </section>
+
+    <!-- MATÉRIAS & CONTEÚDOS -->
+    <section class="subjects-section" id="subjects-section" aria-labelledby="subjects-title">
+        <div class="section-header subjects-heading">
+            <div>
+                <h2 id="subjects-title">Matérias</h2>
+            </div>
+            <div class="section-actions">
+                <button type="button" class="button button-secondary" id="new-subject-button">Nova matéria</button>
+                <button type="button" class="button button-primary" id="contents-new-button">Novo conteúdo</button>
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="subjects-toolbar">
+            <label class="search-field">
+                <span>Buscar</span>
+                <input id="content-search" type="search" placeholder="Buscar matéria ou conteúdo...">
+            </label>
+
+            <label>
+                <span>Matéria</span>
+                <select id="content-subject-filter">
+                    <option value="all">Todas</option>
+                </select>
+            </label>
+
+            <label>
+                <span>Status</span>
+                <select id="content-status-filter">
+                    <option value="all">Todos</option>
+                    <option value="not_started">Não iniciado</option>
+                    <option value="in_progress">Em andamento</option>
+                    <option value="completed">Concluído</option>
+                </select>
+            </label>
+
+            <label>
+                <span>Progresso</span>
+                <select id="content-progress-filter">
+                    <option value="all">Qualquer</option>
+                    <option value="0">0%</option>
+                    <option value="1-49">1–49%</option>
+                    <option value="50-99">50–99%</option>
+                    <option value="100">100%</option>
+                </select>
+            </label>
+
+            <label>
+                <span>Ordenar</span>
+                <select id="content-sort">
+                    <option value="recent">Atividade recente</option>
+                    <option value="progress">Maior progresso</option>
+                    <option value="progress-asc">Menor progresso</option>
+                    <option value="name">Nome</option>
+                    <option value="questions">Questões</option>
+                </select>
+            </label>
+
+            <button type="button" class="text-button" id="clear-content-filters">Limpar</button>
+        </div>
+
+        <div class="subjects-meta">
+            <span id="contents-result-count">0 conteúdos</span>
+        </div>
+
+        <div id="subjects-list" class="subjects-list" aria-live="polite"></div>
+    </section>
+
+    <!-- HISTÓRICO -->
+    <section class="history-section" id="study-history" aria-labelledby="history-title">
+        <div class="section-header compact">
+            <div>
+                <h2 id="history-title">Histórico</h2>
+            </div>
+            <label class="compact-field">
+                <span>Tipo</span>
+                <select id="history-type-filter">
+                    <option value="all">Todos</option>
+                    <option value="theory">Teoria</option>
+                    <option value="exercises">Exercícios</option>
+                    <option value="review">Revisão</option>
+                    <option value="deepening">Aprofundamento</option>
+                    <option value="simulated">Simulado</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="history-meta">
+            <span id="history-visible-count">0 registos</span>
+        </div>
+
+        <div id="global-history" class="history-list"></div>
+    </section>
+
+    <!-- REVISÕES -->
+    <section class="reviews-section" id="reviews-section" aria-labelledby="reviews-title">
+        <div class="section-header compact">
+            <div>
+                <h2 id="reviews-title">Revisões</h2>
+            </div>
+            <button type="button" id="revision-filter-btn" class="button button-secondary">Pendentes</button>
+        </div>
+
+        <div class="review-summary">
+            <div>
+                <span>Pendentes</span>
+                <strong id="reviews-pending-count">0</strong>
+            </div>
+            <div>
+                <span>Próxima</span>
+                <strong id="reviews-next-date">—</strong>
+            </div>
+            <div>
+                <span>Concluídas</span>
+                <strong id="reviews-completed-count">0</strong>
+            </div>
+        </div>
+
+        <div id="reviews-list" class="reviews-list"></div>
+    </section>
+
+    <!-- DESEMPENHO -->
+    <section class="performance-section" id="performance-section" aria-labelledby="performance-title">
+        <div class="section-header compact">
+            <div>
+                <h2 id="performance-title">Desempenho</h2>
+            </div>
+            <label class="compact-field">
+                <span>Período</span>
+                <select id="chart-period">
+                    <option value="30">30 dias</option>
+                    <option value="90" selected>90 dias</option>
+                    <option value="365">1 ano</option>
+                    <option value="all">Todo o período</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="chart-grid">
+            <article class="chart-card chart-card-wide">
+                <div class="chart-header">
+                    <div>
+                        <span>Precisão</span>
+                        <h3>Evolução da precisão</h3>
+                    </div>
+                </div>
+                <div class="chart" role="img" aria-label="Evolução da precisão">
+                    <canvas id="accuracy-chart"></canvas>
+                </div>
+            </article>
+
+            <article class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <span>Volume</span>
+                        <h3>Questões</h3>
+                    </div>
+                </div>
+                <div class="chart" role="img" aria-label="Quantidade de questões">
+                    <canvas id="questions-chart"></canvas>
+                </div>
+            </article>
+
+            <article class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <span>Tempo</span>
+                        <h3>Tempo estudado</h3>
+                    </div>
+                </div>
+                <div class="chart" role="img" aria-label="Tempo estudado">
+                    <canvas id="time-chart"></canvas>
+                </div>
+            </article>
+
+            <article class="chart-card chart-card-wide">
+                <div class="chart-header">
+                    <div>
+                        <span>Evolução</span>
+                        <h3>Evolução acadêmica</h3>
+                    </div>
+                    <label class="chart-switch">
+                        <span>Métrica</span>
+                        <select id="evolution-metric">
+                            <option value="accuracy">Precisão</option>
+                            <option value="questions">Questões</option>
+                            <option value="hours">Horas</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="chart" role="img" aria-label="Evolução acadêmica">
+                    <canvas id="evolution-chart"></canvas>
+                </div>
+            </article>
+        </div>
+    </section>
+
+</main>
+
+
+
+<!-- MODAL — NOVA MATÉRIA -->
+<div class="modal" id="subject-modal" hidden>
+    <div class="modal-backdrop" data-close-modal="subject-modal"></div>
+    <section class="modal-dialog modal-small" role="dialog" aria-modal="true" aria-labelledby="subject-modal-title">
+        <header class="modal-header">
+            <div>
+                <h2 id="subject-modal-title">Nova matéria</h2>
+            </div>
+            <button class="icon-button" type="button" data-close-modal="subject-modal" aria-label="Fechar">×</button>
+        </header>
+        <form id="subject-form" class="form-grid">
+            <label class="field-full">
+                <span>Nome</span>
+                <input id="subject-name" type="text" required maxlength="80" placeholder="Ex.: Matemática">
+            </label>
+            <div class="form-actions field-full">
+                <button type="button" class="button button-secondary" data-close-modal="subject-modal">Cancelar</button>
+                <button class="button button-primary" type="submit">Adicionar</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<!-- MODAL — NOVO / EDITAR CONTEÚDO -->
+<div class="modal" id="content-modal" hidden>
+    <div class="modal-backdrop" data-close-modal="content-modal"></div>
+    <section class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="content-modal-title">
+        <header class="modal-header">
+            <div>
+                <h2 id="content-modal-title">Conteúdo</h2>
+            </div>
+            <button class="icon-button" type="button" data-close-modal="content-modal" aria-label="Fechar">×</button>
+        </header>
+        <form id="content-form" class="form-grid">
+            <input type="hidden" id="content-id">
+            <label>
+                <span>Matéria</span>
+                <select id="content-subject" required></select>
+            </label>
+            <label>
+                <span>Conteúdo</span>
+                <input id="content-name" type="text" required maxlength="120" placeholder="Ex.: Função Afim">
+            </label>
+            <label class="field-full">
+                <span>Descrição</span>
+                <textarea id="content-description" rows="3" maxlength="500"></textarea>
+            </label>
+            <label>
+                <span>Meta de acertos</span>
+                <input id="content-target-correct" type="number" min="1" value="50" required>
+            </label>
+            <label>
+                <span>Tempo mínimo (minutos)</span>
+                <input id="content-target-time" type="number" min="1" value="60" required>
+            </label>
+            <div class="form-actions field-full">
+                <button type="button" class="button button-secondary" data-close-modal="content-modal">Cancelar</button>
+                <button class="button button-primary" type="submit">Salvar conteúdo</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<!-- MODAL — REGISTRAR ESTUDO -->
+<div class="modal" id="record-modal" hidden>
+    <div class="modal-backdrop" data-close-modal="record-modal"></div>
+    <section class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="record-modal-title">
+        <header class="modal-header">
+            <div>
+                <h2 id="record-modal-title">Registrar estudo</h2>
+            </div>
+            <button class="icon-button" type="button" data-close-modal="record-modal" aria-label="Fechar">×</button>
+        </header>
+
+        <form id="record-form" class="form-grid">
+            <input type="hidden" id="record-content-id">
+
+            <div class="record-target field-full">
+                <span>Conteúdo:</span>
+                <strong id="record-content-name-display">—</strong>
+                <small id="record-subject-name-display">—</small>
+            </div>
+
+            <label>
+                <span>Data</span>
+                <input id="record-date" type="date" required>
+            </label>
+
+            <label>
+                <span>Tempo estudado</span>
+                <div class="suffix-input">
+                    <input id="record-duration" type="number" min="11" step="1" value="20" required>
+                    <span>min</span>
+                </div>
+            </label>
+
+            <label>
+                <span>Questões</span>
+                <input id="record-questions" type="number" min="0" step="1" value="0">
+            </label>
+
+            <label>
+                <span>Acertos</span>
+                <input id="record-correct" type="number" min="0" step="1" value="0">
+            </label>
+
+            <label class="field-full">
+                <span>Tipo</span>
+                <select id="record-type">
+                    <option value="theory">Teoria</option>
+                    <option value="exercises" selected>Exercícios</option>
+                    <option value="review">Revisão</option>
+                    <option value="deepening">Aprofundamento</option>
+                    <option value="simulated">Simulado</option>
+                </select>
+            </label>
+
+            <div class="live-stats field-full">
+                <div>
+                    <span>Acertos</span>
+                    <strong id="record-live-correct">0</strong>
+                </div>
+                <div>
+                    <span>Erros</span>
+                    <strong id="record-live-incorrect">0</strong>
+                </div>
+                <div>
+                    <span>Precisão</span>
+                    <strong id="record-live-accuracy">0%</strong>
+                </div>
+            </div>
+
+            <div class="form-actions field-full">
+                <button type="button" class="button button-secondary" data-close-modal="record-modal">Cancelar</button>
+                <button class="button button-primary" type="submit">Salvar registro</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>

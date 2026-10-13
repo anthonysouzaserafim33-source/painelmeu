@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Agenda de execução, planejamento diário, controle de tempo e histórico do Meu Painel.">
+    <meta name="author" content="Anthony">
+    <meta name="theme-color" content="#0b0f0d">
+    <title>Planejamento | Meu Painel</title>
+
+    <!-- Estilos Globais e Específicos -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/planejamento.css">
+
+    <!-- Scripts da Página -->
+    <script src="js/planejamento.js" defer></script>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         CABEÇALHO PRINCIPAL
+    ========================================================== -->
+    <header class="site-header" role="banner">
+        <div class="header-content">
+            <div class="brand">
+                <a href="perfil.html" class="brand-link" aria-label="Página inicial do painel">
+                    <span class="brand-icon" aria-hidden="true">✓</span>
+                    <span class="brand-name">Meu Painel</span>
+                </a>
+            </div>
+
+
+    </header>
+
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <nav class="main-navigation" role="navigation" aria-label="Navegação principal do sistema">
+        <div class="navigation-content">
+            <a href="index.html" class="nav-link">Tarefas</a>
+            <a href="estudos.html" class="nav-link">Estudos</a>
+            <a href="habitos.html" class="nav-link">Hábitos</a>
+            <a href="metas.html" class="nav-link">Metas</a>
+            <a href="planejamento.html" class="nav-link nav-link-active" aria-current="page">Planejamento</a>
+            <a href="calendario.html" class="nav-link">Calendário</a>
+        </div>
+    </nav>
+
+    <!-- =========================================================
+         CONTEÚDO PRINCIPAL
+    ========================================================== -->
+    <main class="planning-page" id="planning-main" role="main">
+
+        <!-- HERO / CABEÇALHO DA PÁGINA -->
+        <header class="planning-hero">
+            <div class="hero-titles">
+                <span class="page-eyebrow">AGENDA DE EXECUÇÃO</span>
+                <h1>Planejamento</h1>
+                <p class="page-description">Organize quando realizará as suas atividades, gerencie o tempo e acompanhe o resultado real da sua execução diária.</p>
+            </div>
+            <div class="hero-actions">
+                <button type="button" class="button button-secondary" id="today-jump-btn">Hoje</button>
+                <button type="button" class="button button-primary" id="new-activity-button" aria-haspopup="dialog">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      Planejar atividade
+                </button>
+            </div>
+        </header>
+
+        <!-- NAVEGAÇÃO TEMPORAL -->
+        <section class="temporal-navigation" aria-label="Controlo de período temporal">
+            <div class="temporal-controls">
+                <button type="button" class="button button-secondary button-small" id="prev-period-btn" aria-label="Período anterior">◀ Anterior</button>
+                <div class="temporal-display">
+                    <span id="current-period-label" class="period-title">Carregando período...</span>
+                </div>
+                <button type="button" class="button button-secondary button-small" id="next-period-btn" aria-label="Próximo período">Próximo ▶</button>
+            </div>
+            <div class="temporal-views">
+                <button type="button" class="view-tab active" data-view="day">Dia</button>
+                <button type="button" class="view-tab" data-view="week">Semana</button>
+            </div>
+        </section>
+
+        <!-- DASHBOARD DE INDICADORES GLOBAIS (PLANEJADO x REALIZADO) -->
+        <section class="planning-overview" aria-labelledby="overview-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">BALANÇO DO PERÍODO</span>
+                    <h2 id="overview-title">Indicadores de Execução</h2>
+                </div>
+            </div>
+
+            <div class="overview-grid" role="region" aria-label="Métricas de planejamento">
+                <article class="metric-card">
+                    <span class="metric-label">Previstas</span>
+                    <strong class="metric-value" data-plan-stat="totalPlanned">0</strong>
+                    <p class="metric-desc">atividades no período</p>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-label">Concluídas</span>
+                    <strong class="metric-value text-success" data-plan-stat="totalCompleted">0</strong>
+                    <p class="metric-desc">executadas com sucesso</p>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-label">Tempo Planejado</span>
+                    <strong class="metric-value text-primary" data-plan-stat="plannedMinutes">0h 00m</strong>
+                    <p class="metric-desc">carga horária estimada</p>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-label">Tempo Realizado</span>
+                    <strong class="metric-value" data-plan-stat="realMinutes">0h 00m</strong>
+                    <p class="metric-desc">tempo efetivo dedicado</p>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-label">Taxa de Execução</span>
+                    <strong class="metric-value text-success" data-plan-stat="executionRate">0%</strong>
+                    <p class="metric-desc">índice de aproveitamento</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- GRID PRINCIPAL: AGENDA HORÁRIA & LISTA "PARA EXECUTAR" -->
+        <div class="planning-workspace-grid">
+            
+            <!-- AGENDA PRINCIPAL -->
+            <section class="agenda-section" aria-labelledby="agenda-title">
+                <div class="section-header compact">
+                    <div>
+                        <span class="section-eyebrow">CRONOGRAMA</span>
+                        <h2 id="agenda-title">Agenda Horária</h2>
+                    </div>
+                </div>
+
+                <div id="agenda-container" class="agenda-container" role="region" aria-label="Grade horária de atividades">
+                    <!-- Preenchido dinamicamente via JS -->
+                </div>
+            </section>
+
+            <!-- LISTA "PARA EXECUTAR" E ATIVIDADES SEM HORÁRIO -->
+            <aside class="execution-sidebar" aria-labelledby="execution-title">
+                <div class="section-header compact">
+                    <div>
+                        <span class="section-eyebrow">EXECUÇÃO IMEDIATA</span>
+                        <h2 id="execution-title">Para Executar</h2>
+                    </div>
+                </div>
+
+                <div id="execution-list-container" class="execution-list" aria-live="polite">
+                    <!-- Preenchido dinamicamente via JS -->
+                </div>
+
+                <div class="untimed-activities-box">
+                    <h4>Atividades sem Horário Definido</h4>
+                    <div id="untimed-list-container" class="untimed-list" aria-live="polite">
+                        <!-- Preenchido dinamicamente via JS -->
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- SEÇÃO DE FILTROS E HISTÓRICO DE ATIVIDADES -->
+        <section class="planning-history-section" aria-labelledby="history-title">
+            <div class="section-header">
+                <div>
+                    <span class="section-eyebrow">REGISTROS ANTERIORES</span>
+                    <h2 id="history-title">Histórico e Consultas</h2>
+                </div>
+            </div>
+
+            <!-- TOOLBAR DE FILTRAGEM -->
+            <div class="planning-toolbar" role="search" aria-label="Filtros de planejamento">
+                <label class="search-field" for="plan-search">
+                    <span>Pesquisa</span>
+                    <input id="plan-search" type="search" placeholder="Filtrar por título..." autocomplete="off">
+                </label>
+
+                <label for="plan-category-filter">
+                    <span>Categoria</span>
+                    <select id="plan-category-filter">
+                        <option value="all">Todas as categorias</option>
+                        <option value="Estudo">Estudo</option>
+                        <option value="Tarefa">Tarefa</option>
+                        <option value="Hábito">Hábito</option>
+                        <option value="Compromisso">Compromisso</option>
+                        <option value="Pessoal">Pessoal</option>
+                        <option value="Descanso">Descanso</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </label>
+
+                <label for="plan-status-filter">
+                    <span>Status</span>
+                    <select id="plan-status-filter">
+                        <option value="all" selected>Todos</option>
+                        <option value="planned">Planejada</option>
+                        <option value="in-progress">Em andamento</option>
+                        <option value="completed">Concluída</option>
+                        <option value="partial">Parcial</option>
+                        <option value="rescheduled">Remarcada</option>
+                        <option value="cancelled">Cancelada</option>
+                    </select>
+                </label>
+
+                <button type="button" class="text-button" id="clear-plan-filters">Limpar Filtros</button>
+            </div>
+
+            <div class="planning-meta">
+                <span id="planning-result-count" aria-live="polite">0 registos encontrados</span>
+            </div>
+
+            <div id="planning-history-list" class="history-list" aria-live="polite">
+                <!-- Preenchido dinamicamente via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========================================================
+         MODAIS DO SISTEMA
+    ========================================================== -->
+
+    <!-- MODAL 01: CRIAR E EDITAR ATIVIDADE -->
+    <div class="modal" id="activity-modal" hidden role="dialog" aria-modal="true" aria-labelledby="activity-modal-title">
+        <div class="modal-backdrop" data-close-modal="activity-modal"></div>
+        <section class="modal-dialog">
+            <header class="modal-header">
+                <div>
+                    <h2 id="activity-modal-title">Planejar Atividade</h2>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="activity-modal" aria-label="Fechar modal">×</button>
+            </header>
+
+            <form id="activity-form" class="form-grid" novalidate>
+                <input type="hidden" id="activity-id">
+
+                <div class="field-full">
+                    <label for="activity-title">Título da atividade *</label>
+                    <input id="activity-title" type="text" required maxlength="120" placeholder="Ex.: Revisar capítulos de matemática, Reunião de projeto">
+                </div>
+
+                <div class="field-full">
+                    <label for="activity-description">Descrição opcional</label>
+                    <textarea id="activity-description" rows="2" maxlength="300" placeholder="Detalhes ou objetivos específicos..."></textarea>
+                </div>
+
+                <!-- SELETORES DE INTEGRAÇÃO COM OUTROS MÓDULOS -->
+                <div>
+                    <label for="activity-link-type">Vincular Ecossistema</label>
+                    <select id="activity-link-type">
+                        <option value="">Nenhum vínculo (Atividade independente)</option>
+                        <option value="task">Tarefa (Gerenciador de Tarefas)</option>
+                        <option value="study">Conteúdo de Estudo</option>
+                        <option value="habit">Hábito</option>
+                        <option value="goal">Meta</option>
+                    </select>
+                </div>
+
+                <div id="activity-link-entity-container">
+                    <!-- Preenchido dinamicamente pelo JS com as entidades reais -->
+                </div>
+
+                <div>
+                    <label for="activity-category">Categoria *</label>
+                    <select id="activity-category" required>
+                        <option value="Tarefa" selected>Tarefa</option>
+                        <option value="Estudo">Estudo</option>
+                        <option value="Hábito">Hábito</option>
+                        <option value="Compromisso">Compromisso</option>
+                        <option value="Pessoal">Pessoal</option>
+                        <option value="Descanso">Descanso</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="activity-priority">Prioridade</label>
+                    <select id="activity-priority">
+                        <option value="medium" selected>Média</option>
+                        <option value="high">Alta</option>
+                        <option value="low">Baixa</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="activity-date">Data *</label>
+                    <input id="activity-date" type="date" required>
+                </div>
+
+                <div>
+                    <label for="activity-duration">Duração planejada (minutos)</label>
+                    <input id="activity-duration" type="number" min="5" step="5" placeholder="Ex.: 45">
+                </div>
+
+                <div>
+                    <label for="activity-start-time">Horário inicial (opcional)</label>
+                    <input id="activity-start-time" type="time">
+                </div>
+
+                <div>
+                    <label for="activity-end-time">Horário final (opcional)</label>
+                    <input id="activity-end-time" type="time">
+                </div>
+
+                <div class="field-full">
+                    <label for="activity-notes">Observações</label>
+                    <input id="activity-notes" type="text" placeholder="Notas adicionais..." autocomplete="off">
+                </div>
+
+                <div id="conflict-warning-box" class="conflict-warning-box" style="display: none;" role="alert">
+                    ⚠️ <strong>Atenção:</strong> Existe conflito de horário com outra atividade planejada neste intervalo.
+                </div>
+
+                <div class="form-actions field-full">
+                    <button type="button" class="button button-secondary" data-close-modal="activity-modal">Cancelar</button>
+                    <button class="button button-primary" type="submit">Salvar Planejamento</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL 02: REGISTRO DE EXECUÇÃO / RESULTADO -->
+    <div class="modal" id="execution-modal" hidden role="dialog" aria-modal="true" aria-labelledby="execution-modal-title">
+        <div class="modal-backdrop" data-close-modal="execution-modal"></div>
+        <section class="modal-dialog">
+            <header class="modal-header">
+                <div>
+                    <span class="section-eyebrow">REGISTRO DE RESULTADO</span>
+                    <h2 id="execution-modal-title">Finalizar ou Atualizar Atividade</h2>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="execution-modal" aria-label="Fechar modal">×</button>
+            </header>
+
+            <form id="execution-form" class="form-grid" novalidate>
+                <input type="hidden" id="exec-activity-id">
+
+                <div class="field-full">
+                    <label for="exec-status">Status final da execução *</label>
+                    <select id="exec-status" required>
+                        <option value="completed">Concluída com sucesso</option>
+                        <option value="partial">Parcial (Executada incompletamente)</option>
+                        <option value="cancelled">Cancelada</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="exec-real-duration">Duração real dedicada (minutos)</label>
+                    <input id="exec-real-duration" type="number" min="0" step="5" placeholder="Ex.: 50">
+                </div>
+
+                <div>
+                    <label for="exec-real-end-time">Horário término real</label>
+                    <input id="exec-real-end-time" type="time">
+                </div>
+
+                <!-- CAMPO DINÂMICO PARA ESTUDOS (Questões e Acertos) -->
+                <div id="exec-study-fields" class="field-full" style="display: none; background: rgba(59, 130, 246, 0.05); padding: 0.75rem; border-radius: 6px;">
+                    <h4 style="font-size: 0.85rem; margin-bottom: 0.5rem; color: #60A5FA;">Desempenho de Estudo Vinculado</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <div>
+                            <label for="exec-real-questions">Questões Resolvidas</label>
+                            <input id="exec-real-questions" type="number" min="0" placeholder="Ex.: 20">
+                        </div>
+                        <div>
+                            <label for="exec-real-correct">Acertos</label>
+                            <input id="exec-real-correct" type="number" min="0" placeholder="Ex.: 15">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMPO DINÂMICO PARA METAS (Valor Quantitativo Real) -->
+                <div id="exec-goal-fields" class="field-full" style="display: none; background: rgba(16, 185, 129, 0.05); padding: 0.75rem; border-radius: 6px;">
+                    <h4 style="font-size: 0.85rem; margin-bottom: 0.5rem; color: #34D399;">Progresso da Meta Vinculada</h4>
+                    <div>
+                        <label for="exec-real-goal-value" id="exec-goal-label">Valor Real Realizado</label>
+                        <input id="exec-real-goal-value" type="number" step="any" placeholder="Ex.: 50 (páginas, capítulos, etc.)">
+                    </div>
+                </div>
+
+                <div class="field-full">
+                    <label for="exec-observation">Observações ou justificativa (parcial/cancelamento)</label>
+                    <textarea id="exec-observation" rows="2" placeholder="Motivo do desvio, notas de aproveitamento..."></textarea>
+                </div>
+
+                <div class="form-actions field-full">
+                    <button type="button" class="button button-secondary" data-close-modal="execution-modal">Voltar</button>
+                    <button class="button button-primary" type="submit">Confirmar Registo</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL 03: REMARCAÇÃO DE ATIVIDADE -->
+    <div class="modal" id="reschedule-modal" hidden role="dialog" aria-modal="true" aria-labelledby="reschedule-modal-title">
+        <div class="modal-backdrop" data-close-modal="reschedule-modal"></div>
+        <section class="modal-dialog">
+            <header class="modal-header">
+                <div>
+                    <span class="section-eyebrow">ADIAMENTO OU REAGENDAMENTO</span>
+                    <h2 id="reschedule-modal-title">Remarcar Atividade</h2>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="reschedule-modal" aria-label="Fechar modal">×</button>
+            </header>
+
+            <form id="reschedule-form" class="form-grid" novalidate>
+                <input type="hidden" id="resch-activity-id">
+
+                <div>
+                    <label for="resch-new-date">Nova data *</label>
+                    <input id="resch-new-date" type="date" required>
+                </div>
+
+                <div>
+                    <label for="resch-new-time">Novo horário inicial</label>
+                    <input id="resch-new-time" type="time">
+                </div>
+
+                <div class="field-full">
+                    <label for="resch-reason">Motivo da remarcação (opcional)</label>
+                    <input id="resch-reason" type="text" placeholder="Ex.: Falta de tempo, imprevisto..." autocomplete="off">
+                </div>
+
+                <div class="form-actions field-full">
+                    <button type="button" class="button button-secondary" data-close-modal="reschedule-modal">Cancelar</button>
+                    <button class="button button-primary" type="submit">Efetivar Remarcação</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>

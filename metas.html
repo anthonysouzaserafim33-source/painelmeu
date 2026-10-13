@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema avançado de planejamento, acompanhamento de metas, marcos e inteligência comportamental.">
+    <meta name="author" content="Anthony">
+    <meta name="theme-color" content="#0b0f0d">
+    <title>Metas e Objetivos | Meu Painel</title>
+
+    <!-- Estilos Globais e Específicos -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/metas.css">
+
+    <!-- Chart.js para análise estatística avançada -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="js/metas.js" defer></script>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         CABEÇALHO PRINCIPAL
+    ========================================================== -->
+    <header class="site-header" role="banner">
+        <div class="header-content">
+            <div class="brand">
+                <a href="perfil.html" class="brand-link" aria-label="Página inicial do painel">
+                    <span class="brand-icon" aria-hidden="true">✓</span>
+                    <span class="brand-name">Meu Painel</span>
+                </a>
+            </div>
+
+    </header>
+
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <nav class="main-navigation" role="navigation" aria-label="Navegação principal do sistema">
+        <div class="navigation-content">
+            <a href="index.html" class="nav-link">Tarefas</a>
+            <a href="estudos.html" class="nav-link">Estudos</a>
+            <a href="habitos.html" class="nav-link">Hábitos</a>
+            <a href="metas.html" class="nav-link nav-link-active" aria-current="page">Metas</a>
+            <a href="planejamento.html" class="nav-link">Planejamento</a>
+            <a href="calendario.html" class="nav-link">Calendário</a>
+        </div>
+    </nav>
+
+    <!-- =========================================================
+         CONTEÚDO PRINCIPAL
+    ========================================================== -->
+    <main class="goals-page" id="goals-main" role="main">
+
+        <!-- HERO / CABEÇALHO DA PÁGINA -->
+        <header class="goals-hero">
+            <div class="hero-titles">
+                <span class="page-eyebrow">DIRECIONAMENTO E CRESCIMENTO</span>
+                <h1>Metas e Objetivos</h1>
+                <p class="page-description">Gerencie propósitos de longo prazo através de indicadores precisos, marcos temporais e histórico evolutivo.</p>
+            </div>
+            <div class="hero-actions">
+                <button type="button" class="button button-secondary" id="export-data-btn">Exportar Backup</button>
+                <label class="button button-secondary" style="cursor: pointer; margin: 0;">
+                    Importar Backup
+                    <input type="file" id="import-data-input" accept=".json" style="display: none;">
+                </label>
+                <button type="button" class="button button-secondary" id="scroll-to-history-btn">
+                    Ver Histórico
+                </button>
+                <button type="button" class="button button-primary" id="new-goal-button" aria-haspopup="dialog">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Nova Meta
+                </button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD DE INDICADORES GLOBAIS -->
+        <section class="goals-overview" aria-labelledby="overview-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">ANÁLISE QUANTITATIVA</span>
+                    <h2 id="overview-title">Indicadores de Desempenho</h2>
+                </div>
+            </div>
+
+            <div class="overview-grid" role="region" aria-label="Métricas gerais de metas">
+                <article class="metric-card" data-metric="active">
+                    <span class="metric-label">Metas Ativas</span>
+                    <strong class="metric-value" data-goal-stat="activeGoals">0</strong>
+                    <p class="metric-desc">em andamento no momento</p>
+                </article>
+                <article class="metric-card" data-metric="completed">
+                    <span class="metric-label">Concluídas</span>
+                    <strong class="metric-value text-success" data-goal-stat="completedGoals">0</strong>
+                    <p class="metric-desc">objetivos concretizados</p>
+                </article>
+                <article class="metric-card" data-metric="overdue">
+                    <span class="metric-label">Atrasadas</span>
+                    <strong class="metric-value text-danger" data-goal-stat="overdueGoals">0</strong>
+                    <p class="metric-desc">prazo expirado</p>
+                </article>
+                <article class="metric-card" data-metric="progress">
+                    <span class="metric-label">Progresso Médio</span>
+                    <strong class="metric-value text-primary" data-goal-stat="avgProgress">0%</strong>
+                    <p class="metric-desc">média ponderada ativa</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE DESTAQUES: PRIORITÁRIAS E EM ATENÇÃO -->
+        <section class="priority-goals-section" aria-labelledby="priority-title">
+            <div class="section-header">
+                <div>
+                    <span class="section-eyebrow">FOCO E ATENÇÃO</span>
+                    <h2 id="priority-title">Metas Prioritárias ou Críticas</h2>
+                </div>
+            </div>
+            <div id="priority-goals-list" class="goals-grid" aria-live="polite">
+                <!-- Preenchido dinamicamente pelo JS -->
+            </div>
+        </section>
+
+        <!-- GERENCIAMENTO CENTRAL E LISTAGEM -->
+        <section class="goals-management-section" aria-labelledby="management-title">
+            <div class="section-header goals-heading">
+                <div>
+                    <span class="section-eyebrow">CENTRAL DE CONTROLE</span>
+                    <h2 id="management-title">Todas as Metas</h2>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="button button-primary" id="management-new-goal-button">
+                        + Nova Meta
+                    </button>
+                </div>
+            </div>
+
+            <!-- TOOLBAR DE FILTRAGEM AVANÇADA -->
+            <div class="goals-toolbar" role="search" aria-label="Filtros avançados de metas">
+                <label class="search-field" for="goal-search">
+                    <span>Pesquisa</span>
+                    <input id="goal-search" type="search" placeholder="Filtrar por nome ou categoria..." autocomplete="off">
+                </label>
+
+                <label for="goal-status-filter">
+                    <span>Situação</span>
+                    <select id="goal-status-filter">
+                        <option value="active" selected>Ativas</option>
+                        <option value="completed">Concluídas</option>
+                        <option value="archived">Arquivadas</option>
+                        <option value="all">Todas</option>
+                    </select>
+                </label>
+
+                <label for="goal-category-filter">
+                    <span>Categoria</span>
+                    <select id="goal-category-filter">
+                        <option value="all">Todas as categorias</option>
+                    </select>
+                </label>
+
+                <label for="goal-priority-filter">
+                    <span>Prioridade</span>
+                    <select id="goal-priority-filter">
+                        <option value="all">Todas</option>
+                        <option value="high">Alta</option>
+                        <option value="medium">Média</option>
+                        <option value="low">Baixa</option>
+                    </select>
+                </label>
+
+                <label for="goal-sort">
+                    <span>Ordenação</span>
+                    <select id="goal-sort">
+                        <option value="due-date">Prazo mais próximo</option>
+                        <option value="progress-desc">Maior progresso</option>
+                        <option value="progress-asc">Menor progresso</option>
+                        <option value="priority">Maior prioridade</option>
+                        <option value="recent">Mais recentes</option>
+                    </select>
+                </label>
+
+                <button type="button" class="text-button" id="clear-goal-filters">Limpar Filtros</button>
+            </div>
+
+            <div class="goals-meta">
+                <span id="goals-result-count" aria-live="polite">0 metas encontradas</span>
+            </div>
+
+            <!-- GRID PRINCIPAL DE METAS -->
+            <div id="goals-list" class="goals-grid" aria-live="polite">
+                <!-- Renderizado via JS -->
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE HISTÓRICO GLOBAL E AUDITORIA -->
+        <section class="history-section" id="goals-history-section" aria-labelledby="history-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">AUDITORIA E REGISTROS</span>
+                    <h2 id="history-title">Histórico Geral de Evolução e Alterações</h2>
+                </div>
+            </div>
+
+            <div id="goals-global-history" class="history-list" aria-live="polite">
+                <!-- Preenchido via JS -->
+            </div>
+        </section>
+
+        <!-- PAINEL ESTATÍSTICO E GRÁFICOS -->
+        <section class="performance-section" aria-labelledby="performance-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">INTELIGÊNCIA VISUAL</span>
+                    <h2 id="performance-title">Distribuição Analítica</h2>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <article class="chart-card chart-card-wide">
+                    <div class="chart-header">
+                        <div>
+                            <span>Categorias</span>
+                            <h3>Concentração de Metas por Categoria</h3>
+                        </div>
+                        <strong id="category-chart-summary">Sem dados</strong>
+                    </div>
+                    <div class="chart" role="img" aria-label="Gráfico de distribuição de metas ativas por categoria">
+                        <canvas id="category-goals-chart"></canvas>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========================================================
+         MODAIS DO SISTEMA
+    ========================================================== -->
+
+    <!-- MODAL 01: CADASTRO E EDIÇÃO DE META -->
+    <div class="modal" id="goal-modal" hidden role="dialog" aria-modal="true" aria-labelledby="goal-modal-title">
+        <div class="modal-backdrop" data-close-modal="goal-modal"></div>
+        <section class="modal-dialog">
+            <header class="modal-header">
+                <div>
+                    <h2 id="goal-modal-title">Nova Meta</h2>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="goal-modal" aria-label="Fechar modal">×</button>
+            </header>
+
+            <form id="goal-form" class="form-grid" novalidate>
+                <input type="hidden" id="goal-id">
+
+                <div class="field-full">
+                    <label for="goal-title">Título da meta *</label>
+                    <input id="goal-title" type="text" required maxlength="120" placeholder="Ex.: Concluir certificação avançada, Escrever livro">
+                </div>
+
+                <div class="field-full">
+                    <label for="goal-description">Descrição detalhada</label>
+                    <textarea id="goal-description" rows="2" maxlength="350" placeholder="Propósito, escopo ou notas sobre o objetivo..."></textarea>
+                </div>
+
+                <div>
+                    <label for="goal-category">Categoria *</label>
+                    <input id="goal-category" type="text" list="goal-category-suggestions" placeholder="Ex.: Estudos, Saúde" required autocomplete="off">
+                    <datalist id="goal-category-suggestions">
+                        <option value="Estudos"></option>
+                        <option value="Carreira e projetos"></option>
+                        <option value="Desenvolvimento pessoal"></option>
+                        <option value="Saúde e atividade física"></option>
+                        <option value="Leitura e conhecimento"></option>
+                        <option value="Organização"></option>
+                        <option value="Finanças"></option>
+                        <option value="Outros"></option>
+                    </datalist>
+                </div>
+
+                <div>
+                    <label for="goal-priority">Prioridade *</label>
+                    <select id="goal-priority" required>
+                        <option value="medium" selected>Média</option>
+                        <option value="high">Alta</option>
+                        <option value="low">Baixa</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="goal-start-date">Data de início</label>
+                    <input id="goal-start-date" type="date">
+                </div>
+
+                <div>
+                    <label for="goal-due-date">Prazo limite</label>
+                    <input id="goal-due-date" type="date">
+                </div>
+
+                <div class="field-full">
+                    <label for="goal-tracking-type">Tipo de acompanhamento *</label>
+                    <select id="goal-tracking-type" required>
+                        <option value="manual" selected>Percentual manual (0–100%)</option>
+                        <option value="quantitative">Quantitativo (Valor-alvo numérico)</option>
+                        <option value="steps">Baseado em etapas (Marcos modulares)</option>
+                    </select>
+                </div>
+
+                <!-- Configuração para Metas Quantitativas -->
+                <div id="quantitative-config-fields" class="form-grid field-full" hidden>
+                    <div>
+                        <label for="goal-target-value">Valor-alvo *</label>
+                        <input id="goal-target-value" type="number" min="0.1" step="any" placeholder="Ex.: 12, 300, 5000">
+                    </div>
+                    <div>
+                        <label for="goal-unit">Unidade de medida *</label>
+                        <input id="goal-unit" type="text" placeholder="Ex.: capítulos, páginas, reais, horas">
+                    </div>
+                </div>
+
+                <div class="field-full" id="goal-status-container" hidden>
+                    <label for="goal-status">Situação do objetivo</label>
+                    <select id="goal-status">
+                        <option value="active">Ativa</option>
+                        <option value="completed">Concluída</option>
+                        <option value="archived">Arquivada</option>
+                    </select>
+                </div>
+
+                <div class="form-actions field-full">
+                    <button type="button" class="button button-secondary" data-close-modal="goal-modal">Cancelar</button>
+                    <button class="button button-primary" type="submit">Salvar Meta</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL 02: PAINEL DE DETALHES, ETAPAS E EVOLUÇÃO -->
+    <div class="modal" id="goal-details-modal" hidden role="dialog" aria-modal="true" aria-labelledby="details-modal-title">
+        <div class="modal-backdrop" data-close-modal="goal-details-modal"></div>
+        <section class="modal-dialog modal-large">
+            <header class="modal-header">
+                <div>
+                    <span class="section-eyebrow" id="details-category-badge">CATEGORIA</span>
+                    <h2 id="details-modal-title">Detalhes da Meta</h2>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="goal-details-modal" aria-label="Fechar modal">×</button>
+            </header>
+
+            <div class="goal-details-content">
+                <p id="details-description" class="details-desc">--</p>
+                
+                <div class="details-meta-grid">
+                    <div><span>Início</span> <strong id="details-start-date">--</strong></div>
+                    <div><span>Prazo</span> <strong id="details-due-date">--</strong></div>
+                    <div><span>Prioridade</span> <strong id="details-priority">--</strong></div>
+                    <div><span>Progresso Real</span> <strong id="details-progress">0%</strong></div>
+                </div>
+
+                <!-- Barra de Progresso Visual Integrada -->
+                <div class="today-progress-bar">
+                    <div id="details-progress-fill" class="today-progress-fill" style="width: 0%;"></div>
+                </div>
+
+                <!-- PREVISÃO INTELIGENTE (Projeção Tendencial) -->
+                <div id="details-trend-forecast" class="trend-forecast-box" style="display: none;">
+                    <!-- Preenchido dinamicamente via JS -->
+                </div>
+
+                <!-- Painel de Atualização de Progresso -->
+                <div class="details-action-box" id="progress-update-box">
+                    <h4>Registrar Novo Avanço</h4>
+                    <form id="progress-update-form" class="inline-form">
+                        <input type="hidden" id="update-goal-id">
+                        <div id="update-input-container">
+                            <!-- Gerado dinamicamente via JS -->
+                        </div>
+                        <input type="text" id="update-note" placeholder="Nota ou observação opcional..." autocomplete="off">
+                        <button type="submit" class="button button-primary">Registrar</button>
+                    </form>
+                </div>
+
+                <!-- Painel de Etapas (Visível apenas se o tipo for 'steps') -->
+                <div class="details-section-box" id="steps-management-section" hidden>
+                    <div class="section-header compact" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <h4 style="margin: 0;">Etapas / Marcos</h4>
+                        <button type="button" class="button button-secondary button-small" id="open-add-step-btn">+ Adicionar Etapa</button>
+                    </div>
+                    <form id="add-step-form" class="inline-form" hidden style="margin-bottom: 0.75rem; margin-top: 0.5rem;">
+                        <input type="text" id="new-step-title" placeholder="Nome da etapa..." required style="flex-grow: 1;">
+                        <button type="submit" class="button button-primary button-small">Adicionar</button>
+                    </form>
+                    <div id="steps-list-container" class="steps-list">
+                        <!-- Etapas inseridas via JS -->
+                    </div>
+                </div>
+
+                <!-- Linha do Tempo / Histórico da Meta e Alterações -->
+                <div class="details-section-box">
+                    <h4 style="margin-bottom: 0.75rem;">Histórico e Auditoria</h4>
+                    <div id="goal-history-timeline" class="history-list">
+                        <!-- Histórico completo de eventos da meta -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ações Destrutivas / de Estado do Rodapé do Modal -->
+            <div class="form-actions modal-footer-actions">
+                <button type="button" class="button button-secondary" id="details-edit-btn">Editar Meta</button>
+                <button type="button" class="button button-secondary" id="details-complete-btn">Concluir</button>
+                <button type="button" class="button button-secondary" id="details-archive-btn">Arquivar</button>
+                <button type="button" class="button button-secondary text-danger" id="details-delete-btn">Excluir</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>

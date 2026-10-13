@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Painel — Perfil e Análise de Desempenho</title>
+    <!-- Estilos globais e específicos do módulo -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/perfil.css">
+    <!-- Biblioteca de Gráficos (Chart.js via CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/perfil.js" defer></script>
+</head>
+    <!-- =========================================================
+         CABEÇALHO PRINCIPAL
+    ========================================================== -->
+    <header class="site-header" role="banner">
+        <div class="header-content">
+            <div class="brand">
+                <a href="perfil.html" class="brand-link" aria-label="Página inicial do painel">
+                    <span class="brand-icon" aria-hidden="true">✓</span>
+                    <span class="brand-name">Meu Painel</span>
+                </a>
+            </div>
+
+
+    </header>
+
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <nav class="main-navigation" role="navigation" aria-label="Navegação principal do sistema">
+        <div class="navigation-content">
+            <a href="index.html" class="nav-link">Tarefas</a>
+            <a href="estudos.html" class="nav-link">Estudos</a>
+            <a href="habitos.html" class="nav-link">Hábitos</a>
+            <a href="metas.html" class="nav-link" >Metas</a>
+            <a href="planejamento.html" class="nav-link">Planejamento</a>
+            <a href="calendario.html" class="nav-link">Calendário</a>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="profile-main-container">
+
+        <!-- CABEÇALHO DA PÁGINA E FILTROS DE PERÍODO -->
+        <section class="profile-header-section">
+            <div class="profile-title-wrapper">
+                <h2>Perfil de Desempenho Pessoal</h2>
+                <p class="section-subtitle">Central de consolidação de dados reais dos módulos do Meu Painel.</p>
+            </div>
+
+            <div class="profile-filters-toolbar">
+                <div class="filter-group">
+                    <label for="timeframe-select" class="filter-label">Período de Análise:</label>
+                    <select id="timeframe-select" class="select-control">
+                        <option value="7">Últimos 7 dias</option>
+                        <option value="30" selected>Últimos 30 dias</option>
+                        <option value="90">Últimos 90 dias</option>
+                        <option value="365">Este ano</option>
+                        <option value="all">Todo o período</option>
+                    </select>
+                </div>
+                <button type="button" id="refresh-profile-data" class="button button-secondary">Atualizar Dados</button>
+            </div>
+        </section>
+
+        <!-- INDICADORES GERAIS (KPIS CONSOLIDADOS) -->
+        <section class="kpi-grid-section">
+            <article class="kpi-card">
+                <span class="kpi-label">Taxa Geral de Execução</span>
+                <strong class="kpi-value" id="kpi-execution-rate">0%</strong>
+                <span class="kpi-trend neutral" id="kpi-execution-trend">Sem dados comparativos</span>
+            </article>
+
+            <article class="kpi-card">
+                <span class="kpi-label">Tarefas Concluídas</span>
+                <strong class="kpi-value" id="kpi-tasks-completed">0</strong>
+                <span class="kpi-origin">Módulo Tarefas</span>
+            </article>
+
+            <article class="kpi-card">
+                <span class="kpi-label">Tempo Total de Estudo</span>
+                <strong class="kpi-value" id="kpi-study-hours">0h 00m</strong>
+                <span class="kpi-origin">Módulo Estudos</span>
+            </article>
+
+            <article class="kpi-card">
+                <span class="kpi-label">Consistência de Hábitos</span>
+                <strong class="kpi-value" id="kpi-habits-consistency">0%</strong>
+                <span class="kpi-origin">Módulo Hábitos</span>
+            </article>
+
+            <article class="kpi-card">
+                <span class="kpi-label">Progresso Médio das Metas</span>
+                <strong class="kpi-value" id="kpi-goals-progress">0%</strong>
+                <span class="kpi-origin">Módulo Metas</span>
+            </article>
+        </section>
+
+        <!-- SEÇÃO DO GRÁFICO PRINCIPAL DE EVOLUÇÃO TEMPORAL -->
+        <section class="chart-section-card">
+            <div class="card-header-flex">
+                <div class="card-title-group">
+                    <h3>Evolução Temporal de Desempenho</h3>
+                    <p class="card-subtitle-small">Acompanhe métricas cruciais baseadas na linha do tempo real.</p>
+                </div>
+                <div class="chart-metric-selector" role="group" aria-label="Seleção de métrica para o gráfico">
+                    <button type="button" class="metric-btn active" data-metric="study">Horas de Estudo</button>
+                    <button type="button" class="metric-btn" data-metric="tasks">Tarefas Concluídas</button>
+                    <button type="button" class="metric-btn" data-metric="accuracy">Aproveitamento (%)</button>
+                </div>
+            </div>
+            
+            <div class="chart-canvas-container">
+                <canvas id="main-evolution-chart"></canvas>
+                <div id="chart-empty-state" class="empty-state-overlay" style="display: none;">
+                    <p>Dados insuficientes para renderizar o gráfico neste período.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE DESEMPENHO DETALHADO POR MÓDULO -->
+        <section class="modules-performance-section">
+            <div class="section-heading-block">
+                <h3>Desempenho Consolidado por Módulo</h3>
+                <p>Métricas detalhadas extraídas diretamente dos repositórios locais do sistema.</p>
+            </div>
+
+            <div class="modules-performance-grid">
+                
+                <!-- 1. Tarefas -->
+                <article class="module-perf-card">
+                    <div class="module-card-header">
+                        <h4>Módulo Tarefas</h4>
+                        <span class="status-badge active" id="badge-tasks-status">Ativo</span>
+                    </div>
+                    <div class="module-stats-list">
+                        <div class="stat-row"><span>Total Registradas:</span> <strong id="stat-tasks-total">0</strong></div>
+                        <div class="stat-row"><span>Concluídas:</span> <strong id="stat-tasks-done" style="color: var(--color-accent);">0</strong></div>
+                        <div class="stat-row"><span>Pendentes:</span> <strong id="stat-tasks-pending">0</strong></div>
+                        <div class="stat-row"><span>Atrasadas:</span> <strong id="stat-tasks-overdue" style="color: #d66a6a;">0</strong></div>
+                        <div class="stat-row"><span>Taxa de Conclusão:</span> <strong id="stat-tasks-rate">0%</strong></div>
+                    </div>
+                </article>
+
+                <!-- 2. Estudos -->
+                <article class="module-perf-card">
+                    <div class="module-card-header">
+                        <h4>Módulo Estudos</h4>
+                        <span class="status-badge active" id="badge-studies-status">Ativo</span>
+                    </div>
+                    <div class="module-stats-list">
+                        <div class="stat-row"><span>Sessões Registradas:</span> <strong id="stat-study-sessions">0</strong></div>
+                        <div class="stat-row"><span>Questões Resolvidas:</span> <strong id="stat-study-questions">0</strong></div>
+                        <div class="stat-row"><span>Acertos Totais:</span> <strong id="stat-study-correct" style="color: var(--color-accent);">0</strong></div>
+                        <div class="stat-row"><span>Aproveitamento:</span> <strong id="stat-study-accuracy">0%</strong></div>
+                        <div class="stat-row"><span>Tempo Líquido:</span> <strong id="stat-study-time">0h 00m</strong></div>
+                    </div>
+                </article>
+
+                <!-- 3. Hábitos -->
+                <article class="module-perf-card">
+                    <div class="module-card-header">
+                        <h4>Módulo Hábitos</h4>
+                        <span class="status-badge active" id="badge-habits-status">Ativo</span>
+                    </div>
+                    <div class="module-stats-list">
+                        <div class="stat-row"><span>Hábitos Ativos:</span> <strong id="stat-habits-active">0</strong></div>
+                        <div class="stat-row"><span>Registros no Período:</span> <strong id="stat-habits-records">0</strong></div>
+                        <div class="stat-row"><span>Consistência Média:</span> <strong id="stat-habits-consistency-card" style="color: var(--color-accent);">0%</strong></div>
+                    </div>
+                </article>
+
+                <!-- 4. Metas -->
+                <article class="module-perf-card">
+                    <div class="module-card-header">
+                        <h4>Módulo Metas</h4>
+                        <span class="status-badge active" id="badge-goals-status">Ativo</span>
+                    </div>
+                    <div class="module-stats-list">
+                        <div class="stat-row"><span>Metas Ativas:</span> <strong id="stat-goals-active">0</strong></div>
+                        <div class="stat-row"><span>Metas Concluídas:</span> <strong id="stat-goals-completed" style="color: var(--color-accent);">0</strong></div>
+                        <div class="stat-row"><span>Progresso Geral:</span> <strong id="stat-goals-avg-progress">0%</strong></div>
+                    </div>
+                </article>
+
+                <!-- 5. Planejamento -->
+                <article class="module-perf-card">
+                    <div class="module-card-header">
+                        <h4>Módulo Planejamento</h4>
+                        <span class="status-badge active" id="badge-planning-status">Ativo</span>
+                    </div>
+                    <div class="module-stats-list">
+                        <div class="stat-row"><span>Atividades Previstas:</span> <strong id="stat-plan-planned">0</strong></div>
+                        <div class="stat-row"><span>Atividades Executadas:</span> <strong id="stat-plan-executed" style="color: var(--color-accent);">0</strong></div>
+                        <div class="stat-row"><span>Taxa de Execução:</span> <strong id="stat-plan-rate">0%</strong></div>
+                    </div>
+                </article>
+
+                <!-- 6. Calendário -->
+                <article class="module-perf-card">
+                    <div class="module-card-header">
+                        <h4>Módulo Calendário</h4>
+                        <span class="status-badge active" id="badge-calendar-status">Ativo</span>
+                    </div>
+                    <div class="module-stats-list">
+                        <div class="stat-row"><span>Eventos no Período:</span> <strong id="stat-cal-events">0</strong></div>
+                        <div class="stat-row"><span>Compromissos Futuros:</span> <strong id="stat-cal-future">0</strong></div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO DE COMPARAÇÃO TEMPORAL E HISTÓRICO CONSOLIDADO -->
+        <section class="bottom-insights-grid">
+            
+            <!-- Comparativo de Períodos -->
+            <div class="insight-box">
+                <h3>Comparativo com Período Anterior</h3>
+                <p class="insight-subtitle">Avaliação proporcional de evolução entre ciclos equivalentes.</p>
+                <div class="comparison-content" id="comparison-metrics-container">
+                    <p class="empty-message">Dados insuficientes para gerar comparativo entre períodos.</p>
+                </div>
+            </div>
+
+            <!-- Histórico Consolidado de Atividades -->
+            <div class="insight-box">
+                <h3>Histórico Consolidado de Atividades</h3>
+                <p class="insight-subtitle">Linha do tempo unificada de eventos recentes do sistema.</p>
+                <div class="unified-history-list" id="unified-history-container">
+                    <p class="empty-message">Nenhum registo histórico unificado encontrado.</p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- NOTIFICAÇÃO / TOAST FLUTUANTE -->
+    <div id="toast" class="toast-notification" aria-live="polite"></div>
+
+    <!-- Script de inicialização e controle do perfil -->
+    <script src="perfil.js"></script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de acompanhamento de hábitos, consistência e métricas comportamentais.">
+    <meta name="author" content="Anthony">
+    <meta name="theme-color" content="#111412">
+    <title>Hábitos | Meu Painel</title>
+
+    <!-- Folhas de Estilo -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/habitos.css">
+
+    <!-- Chart.js e Lógica Principal -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="js/habitos.js" defer></script>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         CABEÇALHO PRINCIPAL
+    ========================================================== -->
+    <header class="site-header">
+        <div class="header-content">
+
+            <div class="brand">
+                <a href="perfil.html" class="brand-link" aria-label="Página inicial do painel">
+                    <span class="brand-icon" aria-hidden="true">✓</span>
+                    <span class="brand-name">Meu Painel</span>
+                </a>
+            </div>
+
+
+    </header>
+
+    <!-- NAVEGAÇÃO PRINCIPAL -->
+    <nav class="main-navigation" aria-label="Navegação principal">
+        <div class="navigation-content">
+            <a href="index.html" class="nav-link">Tarefas</a>
+            <a href="estudos.html" class="nav-link">Estudos</a>
+            <a href="habitos.html" class="nav-link nav-link-active" aria-current="page">Hábitos</a>
+            <a href="metas.html" class="nav-link">Metas</a>
+            <a href="planejamento.html" class="nav-link">Planejamento</a>
+            <a href="calendario.html" class="nav-link">Calendário</a>
+        </div>
+    </nav>
+
+    <!-- =========================================================
+         CONTEÚDO PRINCIPAL
+    ========================================================== -->
+    <main class="habits-page" id="habits-main">
+
+        <!-- CABEÇALHO DA PÁGINA -->
+        <header class="habits-hero">
+            <div>
+                <span class="page-eyebrow">ACOMPANHAMENTO DE CONSISTÊNCIA</span>
+                <h1>Hábitos</h1>
+            </div>
+            <div class="hero-actions">
+                <button type="button" class="button button-secondary" id="habits-history-button" onclick="document.getElementById('habits-history').scrollIntoView({ behavior: 'smooth' });">
+                    Histórico
+                </button>
+                <button type="button" class="button button-primary" id="new-habit-button">
+                    + Novo hábito
+                </button>
+            </div>
+        </header>
+
+        <!-- VISÃO GERAL -->
+        <section class="habits-overview" id="overview-section" aria-labelledby="overview-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">MÉTRICAS</span>
+                    <h2 id="overview-title">Visão geral</h2>
+                </div>
+                <label class="compact-field" for="overview-period">
+                    <span>Período</span>
+                    <select id="overview-period">
+                        <option value="7">7 dias</option>
+                        <option value="30" selected>30 dias</option>
+                        <option value="90">90 dias</option>
+                        <option value="365">1 ano</option>
+                        <option value="all">Todo o período</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="overview-grid">
+                <article class="metric-card">
+                    <span>Hoje</span>
+                    <strong data-habit-stat="todayProgress">0/0</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Taxa de conclusão</span>
+                    <strong data-habit-stat="completionRate">0%</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Sequência atual</span>
+                    <strong data-habit-stat="currentStreak">0 dias</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Maior sequência</span>
+                    <strong data-habit-stat="bestStreak">0 dias</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Hábitos ativos</span>
+                    <strong data-habit-stat="activeHabits">0</strong>
+                </article>
+                <article class="metric-card">
+                    <span>Total de registos</span>
+                    <strong data-habit-stat="totalRecords">0</strong>
+                </article>
+            </div>
+        </section>
+
+        <!-- HOJE -->
+        <section class="today-section" id="today-section" aria-labelledby="today-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">ROTINA DIÁRIA</span>
+                    <h2 id="today-title">Hoje — <span id="today-date-display">--/--</span></h2>
+                </div>
+            </div>
+
+            <div id="today-habits-list" class="today-grid" aria-live="polite">
+                <!-- Preenchido dinamicamente via JS -->
+            </div>
+        </section>
+
+        <!-- GERENCIAMENTO DE HÁBITOS -->
+        <section class="habits-management-section" id="habits-section" aria-labelledby="management-title">
+            <div class="section-header habits-heading">
+                <div>
+                    <span class="section-eyebrow">GERENCIAMENTO</span>
+                    <h2 id="management-title">Meus hábitos</h2>
+                </div>
+                <div class="section-actions">
+                    <button type="button" class="button button-primary" id="management-new-habit-button">
+                        + Novo hábito
+                    </button>
+                </div>
+            </div>
+
+            <!-- FILTROS -->
+            <div class="habits-toolbar" role="search" aria-label="Filtros de hábitos">
+                <label class="search-field" for="habit-search">
+                    <span>Buscar</span>
+                    <input id="habit-search" type="search" placeholder="Buscar hábito ou categoria..." autocomplete="off">
+                </label>
+
+                <label for="habit-category-filter">
+                    <span>Categoria</span>
+                    <select id="habit-category-filter">
+                        <option value="all">Todas</option>
+                    </select>
+                </label>
+
+                <label for="habit-status-filter">
+                    <span>Status</span>
+                    <select id="habit-status-filter">
+                        <option value="active" selected>Ativos</option>
+                        <option value="paused">Pausados</option>
+                        <option value="archived">Arquivados</option>
+                        <option value="all">Todos</option>
+                    </select>
+                </label>
+
+                <label for="habit-frequency-filter">
+                    <span>Frequência</span>
+                    <select id="habit-frequency-filter">
+                        <option value="all">Qualquer</option>
+                        <option value="daily">Todos os dias</option>
+                        <option value="weekdays">Segunda a sexta</option>
+                        <option value="specific">Dias específicos</option>
+                    </select>
+                </label>
+
+                <label for="habit-sort">
+                    <span>Ordenar</span>
+                    <select id="habit-sort">
+                        <option value="recent">Criados recentemente</option>
+                        <option value="name">Nome</option>
+                        <option value="streak">Maior sequência</option>
+                        <option value="rate-desc">Maior consistência</option>
+                        <option value="rate-asc">Menor consistência</option>
+                    </select>
+                </label>
+
+                <button type="button" class="text-button" id="clear-habit-filters">Limpar</button>
+            </div>
+
+            <div class="habits-meta">
+                <span id="habits-result-count">0 hábitos encontrados</span>
+            </div>
+
+            <div id="habits-list" class="habits-list-grid" aria-live="polite">
+                <!-- Lista detalhada gerida via JS -->
+            </div>
+        </section>
+
+        <!-- PRECISA DE ATENÇÃO -->
+        <section class="attention-section" id="attention-section" aria-labelledby="attention-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">DESEMPENHO CRÍTICO</span>
+                    <h2 id="attention-title">Precisa de atenção</h2>
+                </div>
+            </div>
+
+            <div id="attention-list" class="attention-grid">
+                <!-- Preenchido via JS -->
+            </div>
+        </section>
+
+        <!-- CALENDÁRIO DE CONSISTÊNCIA (HEATMAP) -->
+        <section class="consistency-section" id="consistency-section" aria-labelledby="consistency-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">ACOMPANHAMENTO VISUAL</span>
+                    <h2 id="consistency-title">Calendário de consistência</h2>
+                </div>
+                <label class="compact-field" for="consistency-month-picker">
+                    <span>Mês</span>
+                    <input type="month" id="consistency-month-picker">
+                </label>
+            </div>
+
+            <div class="heatmap-container">
+                <div class="heatmap-header">
+                    <span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span>
+                </div>
+                <div id="consistency-heatmap" class="heatmap-grid">
+                    <!-- Renderizado via JS -->
+                </div>
+                <div class="heatmap-legend">
+                    <span>Menos consistência</span>
+                    <span class="legend-box level-0" title="Sem registros"></span>
+                    <span class="legend-box level-1" title="Baixa"></span>
+                    <span class="legend-box level-2" title="Média"></span>
+                    <span class="legend-box level-3" title="Boa"></span>
+                    <span class="legend-box level-4" title="Excelente"></span>
+                    <span>Mais consistência</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- HISTÓRICO DIÁRIO -->
+        <section class="history-section" id="habits-history" aria-labelledby="history-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">REGISTROS</span>
+                    <h2 id="history-title">Histórico de execuções</h2>
+                </div>
+                <label class="compact-field" for="history-date-filter">
+                    <span>Filtrar por data</span>
+                    <input type="date" id="history-date-filter">
+                </label>
+            </div>
+
+            <div class="history-meta">
+                <span id="history-visible-count">0 registos</span>
+            </div>
+
+            <div id="global-history" class="history-list" aria-live="polite">
+                <!-- Registos agrupados por data via JS -->
+            </div>
+        </section>
+
+        <!-- DESEMPENHO -->
+        <section class="performance-section" id="performance-section" aria-labelledby="performance-title">
+            <div class="section-header compact">
+                <div>
+                    <span class="section-eyebrow">ANÁLISE ESTATÍSTICA</span>
+                    <h2 id="performance-title">Análise de rendimento</h2>
+                </div>
+                <label class="compact-field" for="chart-period">
+                    <span>Período</span>
+                    <select id="chart-period">
+                        <option value="7">7 dias</option>
+                        <option value="30" selected>30 dias</option>
+                        <option value="90">90 dias</option>
+                        <option value="365">1 ano</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="chart-grid">
+                <!-- TAXA DE EVOLUÇÃO DIÁRIA -->
+                <article class="chart-card chart-card-wide">
+                    <div class="chart-header">
+                        <div>
+                            <span>Consistência</span>
+                            <h3>Evolução da taxa de conclusão (%)</h3>
+                        </div>
+                        <strong id="evolution-chart-summary">Sem dados</strong>
+                    </div>
+                    <div class="chart" role="img" aria-label="Gráfico da evolução da taxa de conclusão">
+                        <canvas id="evolution-chart"></canvas>
+                    </div>
+                </article>
+
+                <!-- CONSISTÊNCIA POR CATEGORIA -->
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <span>Categorias</span>
+                            <h3>Desempenho por categoria</h3>
+                        </div>
+                        <strong id="category-chart-summary">Sem dados</strong>
+                    </div>
+                    <div class="chart" role="img" aria-label="Gráfico de desempenho por categoria">
+                        <canvas id="category-chart"></canvas>
+                    </div>
+                </article>
+
+                <!-- DISTRIBUIÇÃO DAS EXECUÇÕES -->
+                <article class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <span>Volume</span>
+                            <h3>Conclusões por dia da semana</h3>
+                        </div>
+                        <strong id="weekday-chart-summary">Sem dados</strong>
+                    </div>
+                    <div class="chart" role="img" aria-label="Gráfico de conclusões por dia da semana">
+                        <canvas id="weekday-chart"></canvas>
+                    </div>
+                </article>
+            </div>
+
+            <div id="chart-error" class="chart-system-error" hidden role="alert"></div>
+        </section>
+
+    </main>
+
+    <!-- =========================================================
+         RODAPÉ
+    ========================================================== -->
+
+
+    <!-- =========================================================
+         MODAIS
+    ========================================================== -->
+
+    <!-- MODAL — NOVO / EDITAR HÁBITO -->
+    <div class="modal" id="habit-modal" hidden>
+        <div class="modal-backdrop" data-close-modal="habit-modal"></div>
+        <section class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="habit-modal-title">
+            <header class="modal-header">
+                <div>
+                    <h2 id="habit-modal-title">Novo hábito</h2>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="habit-modal" aria-label="Fechar modal">×</button>
+            </header>
+
+            <form id="habit-form" class="form-grid">
+                <input type="hidden" id="habit-id">
+
+                <div class="field-full">
+                    <label for="habit-name">Nome do hábito</label>
+                    <input id="habit-name" type="text" required maxlength="100" placeholder="Ex.: Ler livros, Beber água, Meditar">
+                </div>
+
+                <div class="field-full">
+                    <label for="habit-description">Descrição</label>
+                    <textarea id="habit-description" rows="2" maxlength="300" placeholder="Ex.: Ler 20 páginas antes de dormir"></textarea>
+                </div>
+
+                <div>
+                    <label for="habit-category">Categoria</label>
+                    <input id="habit-category" type="text" list="category-suggestions" placeholder="Ex.: Saúde, Estudos" required>
+                    <datalist id="category-suggestions">
+                        <option value="Estudos"></option>
+                        <option value="Saúde"></option>
+                        <option value="Espiritualidade"></option>
+                        <option value="Organização"></option>
+                        <option value="Exercício"></option>
+                        <option value="Pessoal"></option>
+                    </datalist>
+                </div>
+
+                <div>
+                    <label for="habit-preferred-time">Horário preferido</label>
+                    <input id="habit-preferred-time" type="time">
+                </div>
+
+                <div>
+                    <label for="habit-frequency">Frequência</label>
+                    <select id="habit-frequency" required>
+                        <option value="daily" selected>Todos os dias</option>
+                        <option value="weekdays">Segunda a sexta</option>
+                        <option value="specific">Dias específicos</option>
+                    </select>
+                </div>
+
+                <!-- Seleção de Dias Específicos -->
+                <div id="frequency-days-container" class="field-full frequency-days-selector" hidden>
+                    <span>Dias da semana previstos</span>
+                    <div class="days-checkbox-group">
+                        <label class="day-checkbox"><input type="checkbox" name="habit-days" value="0"> Dom</label>
+                        <label class="day-checkbox"><input type="checkbox" name="habit-days" value="1"> Seg</label>
+                        <label class="day-checkbox"><input type="checkbox" name="habit-days" value="2"> Ter</label>
+                        <label class="day-checkbox"><input type="checkbox" name="habit-days" value="3"> Qua</label>
+                        <label class="day-checkbox"><input type="checkbox" name="habit-days" value="4"> Qui</label>
+                        <label class="day-checkbox"><input type="checkbox" name="habit-days" value="5"> Sex</label>
+                        <label class="day-checkbox"><input type="checkbox" name="habit-days" value="6"> Sáb</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="habit-target-type">Tipo de meta</label>
+                    <select id="habit-target-type">
+                        <option value="binary" selected>Sim/Não (Binário)</option>
+                        <option value="quantitative">Quantidade (Quantitativo)</option>
+                    </select>
+                </div>
+
+                <!-- Campos de Meta Quantitativa -->
+                <div id="quantitative-fields" class="form-grid field-full" hidden>
+                    <div>
+                        <label for="habit-target-value">Meta diária</label>
+                        <input id="habit-target-value" type="number" min="0.1" step="any" placeholder="Ex.: 2, 20, 2000">
+                    </div>
+
+                    <div>
+                        <label for="habit-unit">Unidade</label>
+                        <input id="habit-unit" type="text" placeholder="Ex.: páginas, litros, min, km">
+                    </div>
+                </div>
+
+                <div class="field-full" id="status-field-container" hidden>
+                    <label for="habit-status">Status do hábito</label>
+                    <select id="habit-status">
+                        <option value="active">Ativo</option>
+                        <option value="paused">Pausado</option>
+                        <option value="archived">Arquivado</option>
+                    </select>
+                </div>
+
+                <div class="form-actions field-full">
+                    <button type="button" class="button button-secondary" data-close-modal="habit-modal">Cancelar</button>
+                    <button class="button button-primary" type="submit">Salvar hábito</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL — REGISTRAR PROGRESSO QUANTITATIVO -->
+    <div class="modal" id="record-modal" hidden>
+        <div class="modal-backdrop" data-close-modal="record-modal"></div>
+        <section class="modal-dialog modal-small" role="dialog" aria-modal="true" aria-labelledby="record-modal-title">
+            <header class="modal-header">
+                <div>
+                    <h2 id="record-modal-title">Registrar progresso</h2>
+                    <p id="record-habit-name-display" class="modal-context">—</p>
+                </div>
+                <button class="icon-button" type="button" data-close-modal="record-modal" aria-label="Fechar modal">×</button>
+            </header>
+
+            <form id="record-form" class="form-grid">
+                <input type="hidden" id="record-habit-id">
+                <input type="hidden" id="record-date">
+
+                <div class="field-full">
+                    <label for="record-value" id="record-value-label">Valor atingido</label>
+                    <div class="suffix-input">
+                        <input id="record-value" type="number" min="0" step="any" required>
+                        <span id="record-unit-display">—</span>
+                    </div>
+                </div>
+
+                <div class="field-full">
+                    <label for="record-notes">Observação (opcional)</label>
+                    <textarea id="record-notes" rows="3" maxlength="300" placeholder="Anotações sobre a execução..."></textarea>
+                </div>
+
+                <div class="form-actions field-full">
+                    <button type="button" class="button button-secondary" data-close-modal="record-modal">Cancelar</button>
+                    <button class="button button-primary" type="submit">Salvar registo</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <!-- NOTIFICAÇÃO TOAST -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>
